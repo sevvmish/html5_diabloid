@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [DefaultExecutionOrder(-100)]
@@ -11,6 +12,9 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     //[SerializeField] private Camera MinimapCamera;
     public Light MainLight;
+
+    //todel
+    public TextMeshProUGUI texter;
 
     public Transform mainPlayerTransform { get; private set; }
     public Rigidbody mainPlayerRigidbody { get; private set; }
@@ -33,8 +37,8 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        Screen.SetResolution(1200, 600, true);
-        Application.targetFrameRate = -1;
+        //Screen.SetResolution(1200, 600, true);
+        //Application.targetFrameRate = -1;
 
         mainPlayerTransform = MainPlayer.GetComponent<Transform>();
         mainPlayerRigidbody = MainPlayer.GetComponent<Rigidbody>();
@@ -42,6 +46,14 @@ public class GameManager : MonoBehaviour
         //minimapCameraBody = MinimapCamera.transform;
         //MinimapCamera.orthographicSize = 20;
         MainLight.intensity = 1.0f;
+
+        texter.text = SystemInfo.deviceType.ToString();
+
+        Barbarian b = new Barbarian();
+        Creature cr = b;
+
+        print(b.CurrentEnergy + " = " + b.CurrentHealth + " = " + b.StaminaModifier);
+        print(cr.CurrentEnergy + " = " + cr.CurrentHealth);
     }
 
 }

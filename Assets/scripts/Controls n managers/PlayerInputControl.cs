@@ -14,7 +14,7 @@ public class PlayerInputControl : MonoBehaviour
     private readonly float cameraRayCast = 30f;
     private Vector3 destinationPoint;
     private bool isStopped;
-
+    private bool isJoystick;
 
     void Start()
     {
@@ -26,9 +26,16 @@ public class PlayerInputControl : MonoBehaviour
        
     private void FixedUpdate()
     {        
-        if (Mathf.Abs(joystick.Horizontal) > 0.1f || Mathf.Abs(joystick.Vertical) > 0.1f)
+        if (joystick.Direction.magnitude > 0.1f)
         {
-            destinationPoint = mainPlayerTransform.position + new Vector3(joystick.Direction.x, 0, joystick.Direction.y)*0.5f;
+            mainPlayerTransform.DOLocalRotate(new Vector3(0, Mathf.Atan2(joystick.Horizontal, joystick.Vertical) * 180 / Mathf.PI, 0), 0.1f);
+            if (playerRigidbody.velocity.magnitude < 5)
+            {
+                playerRigidbody.velocity = mainPlayerTransform.forward * 5;
+            }
+            
+            isJoystick = true;
+            isStopped = false;
         } 
         else if (Input.GetMouseButton(0) && joystick.Direction == Vector2.zero)
         {
@@ -36,25 +43,31 @@ public class PlayerInputControl : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, cameraRayCast))
             {
+                isJoystick = false;
+
                 if (hit.collider.gameObject.layer.Equals(7))
                 {
-                    destinationPoint = hit.point;
+                    destinationPoint = hit.point;                    
+                }
+                else if (TryGetComponent(out IHitable hitable))
+                {
+
                 }
                 
             }
         }
 
-        
-        if ((new Vector3(mainPlayerTransform.position.x, 0, mainPlayerTransform.position.z) - new Vector3(destinationPoint.x, 0, destinationPoint.z)).magnitude > 0.1f) 
+        float distance = (mainPlayerTransform.position - destinationPoint).magnitude;
+
+        if (distance > 0.1f && !isJoystick) 
         {
             transformation(destinationPoint);
             isStopped = false;
         }
-        else
+        else if ((distance <= 0.1f && !isJoystick) || (isJoystick && joystick.Direction == Vector2.zero))
         {
             if (!isStopped)
             {
-                destinationPoint = mainPlayerTransform.position;
                 playerRigidbody.velocity = Vector3.zero;
                 playerRigidbody.angularVelocity = Vector3.zero;
                 isStopped = true;
@@ -68,26 +81,14 @@ public class PlayerInputControl : MonoBehaviour
         Quaternion _lookRotation = Quaternion.LookRotation(dir);
         if (mainPlayerTransform.rotation != _lookRotation)
         {
-            StartCoroutine(rotateMainPlayer(_lookRotation));
             //mainPlayerTransform.rotation = _lookRotation;
-            //mainPlayerTransform.localEulerAngles = new Vector3(0, mainPlayerTransform.localEulerAngles.y, 0);
+            mainPlayerTransform.DORotateQuaternion(_lookRotation, 0.1f);
         }
         
         if (playerRigidbody.velocity.magnitude<5)
         {
              playerRigidbody.velocity = mainPlayerTransform.forward * 5;
         }        
-    }
-
-    IEnumerator rotateMainPlayer(Quaternion q)
-    {
-        mainPlayerTransform.DORotateQuaternion(q, 0.1f);
-        for (float i = 0; i < 0.1f; i += Time.deltaTime)
-        {
-            yield return new WaitForSeconds(Time.deltaTime);
-            mainPlayerTransform.localEulerAngles = new Vector3(0, mainPlayerTransform.localEulerAngles.y, 0);
-        }
-
     }
 
 
