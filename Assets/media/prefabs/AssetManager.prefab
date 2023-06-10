@@ -44,4 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2eaec68d1d01d84aaeef94a4c1033d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AssetPack: []
+  AssetPack:
+  - {fileID: 11400000, guid: c05a3c13f95244e4aa72692fb51b9e43, type: 2}

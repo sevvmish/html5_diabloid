@@ -69,17 +69,25 @@ public class Barbarian : Creature
         MainPlayerClasses.Barbarian
         )
     {
-        
+
     }
 
 }
 
 public interface IHitable
 {
-    
-
+    PlayerManager owner { get; }
+    float PlayerRadius { get; }
+    void ReceiveHit();
 }
 
+
+
+
+
+
+
+    
 public enum CreatureTypes
 {
     MainPlayer,

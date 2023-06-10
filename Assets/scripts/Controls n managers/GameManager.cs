@@ -6,12 +6,13 @@ using UnityEngine;
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
 {
-    public GameObject MainPlayer;
-    public Joystick mainJoystick;
-    public Transform mainCameraTransform;
-    public Camera mainCamera;
+    [SerializeField] private GameObject MainPlayer;
+    [SerializeField] private Joystick mainJoystick;
+    [SerializeField] private Transform mainCameraTransform;
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private AssetManager assetManager;
     //[SerializeField] private Camera MinimapCamera;
-    public Light MainLight;
+    [SerializeField] private Light MainLight;
 
     //todel
     public TextMeshProUGUI texter;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     //public Transform minimapCameraBody { get; private set; }
     public Joystick GetJoystick => mainJoystick;
     public Camera GetMainCamera => mainCamera;
+    public AssetManager GetAssetManager => assetManager;
 
     public static GameManager Instance { get; private set; }
     
