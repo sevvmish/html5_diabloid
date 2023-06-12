@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerInputControl : MonoBehaviour
 {
@@ -15,7 +14,7 @@ public class PlayerInputControl : MonoBehaviour
     private readonly float cameraRayCast = 30f;
     private Vector3 destinationPoint;
     private bool isStopped;
-    private bool isJoystick;
+    private bool isJoystick = Globals.IsJoystick;
 
     private PlayerManager playerManager;
     private float speed = 5;
@@ -23,90 +22,104 @@ public class PlayerInputControl : MonoBehaviour
 
 
     //todel
-    private Vector3 oldPos;
+    
 
     void Start()
     {
         joystick = GameManager.Instance.GetJoystick;
         playerRigidbody = GameManager.Instance.mainPlayerRigidbody;
         mainPlayerTransform = GameManager.Instance.mainPlayerTransform;
-        mainCamera = GameManager.Instance.GetMainCamera;
-        
+        mainCamera = GameManager.Instance.GetMainCamera;        
         playerManager = GetComponent<PlayerManager>();
+
+        if (!isJoystick)
+        {
+            joystick.gameObject.SetActive(false);
+        }
     }
        
     private void FixedUpdate()
     {
         //joystick===================================================
-        if (joystick.Direction.magnitude > 0f && playerManager.IsCanMove)
+        if (isJoystick)
         {
-            mainPlayerTransform.DOLocalRotate(new Vector3(0, Mathf.Atan2(joystick.Horizontal, joystick.Vertical) * 180 / Mathf.PI, 0), 0.1f);
-            if (playerRigidbody.velocity.magnitude < speed)
+            if (joystick.Direction.magnitude > 0f && playerManager.IsCanMove)
             {
-                playerRigidbody.velocity = mainPlayerTransform.forward * speed;
-            }
-            isJoystick = true;
-            isStopped = false;
-        }
-        else
-        {
-            isJoystick = false;
+                mainPlayerTransform.DOLocalRotate(new Vector3(0, Mathf.Atan2(joystick.Horizontal, joystick.Vertical) * 180 / Mathf.PI, 0), 0.1f);
+                if (playerRigidbody.velocity.magnitude < speed)
+                {
+                    playerRigidbody.velocity = mainPlayerTransform.forward * speed;
+                }
 
-            if (!isStopped)
+                isStopped = false;
+            }
+            else
             {
-                playerRigidbody.velocity = Vector3.zero;
-                playerRigidbody.angularVelocity = Vector3.zero;
-                isStopped = true;
+                if (!isStopped)
+                {
+                    playerRigidbody.velocity = Vector3.zero;
+                    playerRigidbody.angularVelocity = Vector3.zero;
+                    isStopped = true;
+                }
             }
         }
-
-       
         
+
         //keyboard====================================================        
-        if (Input.GetMouseButton(0) && playerManager.IsCanMove && joystick.Direction.magnitude <= 0f)
+        if (!isJoystick)
         {
-            ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            
+            if (Input.GetMouseButton(0) && playerManager.IsCanMove)
+            {                
+                ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit, cameraRayCast))
-            {
-                if (hit.collider.gameObject.layer.Equals(7))
+                if (Physics.Raycast(ray, out hit, cameraRayCast))
                 {
-                    destinationPoint = hit.point;
-                    deltaLimit = 0.1f;
+                    if (hit.collider.gameObject.layer.Equals(7))
+                    {
+                        destinationPoint = hit.point;
+                        deltaLimit = 0.1f;
+                    }
+                    else if (hit.collider.GetComponent<IHitable>() != null)
+                    {
+                        IHitable hitable = hit.collider.GetComponent<IHitable>();
+
+                        playerManager.SkillOneAttack(hitable);
+                        destinationPoint = hitable.owner.transform.position;
+                        deltaLimit = hitable.PlayerRadius;
+                    }
                 }
-                else if (hit.collider.GetComponent<IHitable>() != null)
-                {
-                    IHitable hitable = hit.collider.GetComponent<IHitable>();
+            }
 
-                    playerManager.Attack(hitable);
-                    destinationPoint = hitable.owner.transform.position;
-                    deltaLimit = hitable.PlayerRadius;
+            if (Input.GetMouseButton(1))
+            {
+                playerManager.SkillTwoAttack();
+            }
+
+
+            float distance = (new Vector3(mainPlayerTransform.position.x, 0, mainPlayerTransform.position.z)
+                - new Vector3(destinationPoint.x, 0, destinationPoint.z)).magnitude;
+
+            if (distance > deltaLimit && playerManager.IsCanMove)
+            {
+                movementToPoint(destinationPoint);
+            }
+            else
+            {
+                if (!isStopped)
+                {
+                    playerRigidbody.velocity = Vector3.zero;
+                    playerRigidbody.angularVelocity = Vector3.zero;
+                    isStopped = true;
                 }
             }
         }
-
-
-        float distance = (new Vector3(mainPlayerTransform.position.x, 0, mainPlayerTransform.position.z)
-            - new Vector3(destinationPoint.x, 0, destinationPoint.z)).magnitude;
-
-        if (distance > deltaLimit && playerManager.IsCanMove)
-        {
-            movementToPoint(destinationPoint);
-        }
-        else
-        {
-            if (!isStopped)
-            {
-                playerRigidbody.velocity = Vector3.zero;
-                playerRigidbody.angularVelocity = Vector3.zero;
-                isStopped = true;
-            }
-        }
+        
         
 
         if (Input.GetKey(KeyCode.A))
         {
-            playerManager.Attack();
+            playerManager.SkillOneAttack();
         }
 
         //animator data about run-idle

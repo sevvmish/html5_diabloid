@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public abstract class Creature
 {
     public int Level { get; private set; } = 1;
+    public void SetLevel(int level) => Level = level;
+
     public float CurrentHealth { get; private set; }
     public float MaxHealth { get { return Stamina * StaminaModifierForHealth; } }
     public CreatureTypes CreatureType { get; private set; }
@@ -26,6 +29,8 @@ public abstract class Creature
     public float Stamina { get { return StaminaModifier * Level; } }
     public float StaminaModifier { get; private set; }
     public float StaminaModifierForHealth { get; private set; }
+    public Inventory Inventory { get; private set; }
+    public void SetInventory(Inventory inventory) => Inventory = inventory;
 
     public Creature(
         int Level,
@@ -52,6 +57,10 @@ public abstract class Creature
 
         CurrentHealth = MaxHealth;        
     }
+
+    public Creature() { }
+
+    
 }
 
 public class Barbarian : Creature
@@ -72,13 +81,31 @@ public class Barbarian : Creature
 
     }
 
+    public Barbarian(int level, int playerClass) : base
+        (
+        level, //level
+        1, //StrengthModifier
+        1, //AgilityModifier
+        1, //IntellectModifier
+        1, //StaminaModifier
+        10, //StaminaModifierForHealth
+        1, //MaxSpeed
+        CreatureTypes.MainPlayer,
+        (MainPlayerClasses)playerClass
+        )
+    {
+
+    }
+
 }
+
+
 
 public interface IHitable
 {
     PlayerManager owner { get; }
     float PlayerRadius { get; }
-    void ReceiveHit();
+    void ReceiveHit(WeaponDamage wd);
 }
 
 
@@ -87,7 +114,7 @@ public interface IHitable
 
 
 
-    
+
 public enum CreatureTypes
 {
     MainPlayer,

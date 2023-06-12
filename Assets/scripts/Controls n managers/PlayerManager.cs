@@ -4,25 +4,37 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour, IHitable
 {
+    public Creature mainPlayerEntity { get; private set; }
+
     private Transform currentTransform;
     private GameObject skin;
     private Animator animator;
     private WeaponManager weaponManager;
+    private PlayerData playerData;
 
-    public bool IsCanMove;
+    public bool IsCanMove { get; private set; }
 
+    //skills
     
 
     // Start is called before the first frame update
     void Start()
     {
+        mainPlayerEntity = Globals.GetPlayerEntity();
+        playerData = Globals.MainPlayerData;
+        mainPlayerEntity.SetInventory(new Inventory(playerData));
+
         IsCanMove = true;
         weaponManager = GetComponent<WeaponManager>();
+        weaponManager.SetPlayerData(mainPlayerEntity);
+
         currentTransform = GetComponent<Transform>();
-        skin = Instantiate(GameManager.Instance.GetAssetManager.GetGameObjectAsset(1), transform.position, Quaternion.identity, currentTransform);
+        skin = Instantiate(GameManager.Instance.GetAssetManager.GetPlayerSkinPack(1), transform.position, Quaternion.identity, currentTransform);
         
         animator = skin.GetComponent<Animator>();
     }
+
+    
 
     public void IdleAnimation()
     {
@@ -40,23 +52,47 @@ public class PlayerManager : MonoBehaviour, IHitable
         }            
     }
 
-    public bool Attack(IHitable aim)
+    public bool SkillOneAttack(IHitable aim)
     {
         return weaponManager.Attack(aim);
     }
 
-    public bool Attack()
+    public bool SkillOneAttack()
     {
         return weaponManager.Attack();
+    }
+
+    public bool SkillTwoAttack()
+    {
+        //todo
+        return false;
+    }
+
+    public bool SkillThreeAttack()
+    {
+        //todo
+        return false;
+    }
+
+    public bool SkillFourAttack()
+    {
+        //todo
+        return false;
+    }
+
+    public bool SkillFiveAttack()
+    {
+        //todo
+        return false;
     }
 
     //HITABLE============================================================
     public PlayerManager owner { get => this; }
     public float PlayerRadius { get => 1f; }
 
-    public void ReceiveHit()
+    public void ReceiveHit(WeaponDamage wd)
     {
-        print("player " + gameObject.name + " received hit");
+        print("player " + gameObject.name + " received hit: " + wd.DamageDistanceType + " = " + wd.DamageType + " = " + wd.DamageAmount);
         StartCoroutine(receiveHit());
     }
     private IEnumerator receiveHit()

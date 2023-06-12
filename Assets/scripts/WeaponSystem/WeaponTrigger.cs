@@ -7,7 +7,8 @@ public class WeaponTrigger : MonoBehaviour
 {
     private PlayerManager owner;
     private int enemyLimit;
-    private int currentEnemyLimit;   
+    private int currentEnemyLimit;
+    private WeaponDamage weaponDamage;
 
     private void OnEnable()
     {
@@ -23,7 +24,7 @@ public class WeaponTrigger : MonoBehaviour
             if (h != null && h.owner != owner)
             {
                 owner.transform.DOLookAt(new Vector3(h.owner.transform.position.x, 0, h.owner.transform.position.z), 0.1f);
-                h.ReceiveHit();
+                h.ReceiveHit(weaponDamage);
                 currentEnemyLimit++;
 
                 if (currentEnemyLimit >= enemyLimit) 
@@ -34,8 +35,9 @@ public class WeaponTrigger : MonoBehaviour
         }
     }
 
-    public void SetConditions(PlayerManager owner, int enemyLimit)
+    public void SetConditions(PlayerManager owner, int enemyLimit, WeaponDamage weaponDamage)
     {
+        this.weaponDamage = weaponDamage;
         this.owner = owner;
         this.enemyLimit = enemyLimit;
     }

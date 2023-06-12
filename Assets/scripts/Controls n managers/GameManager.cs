@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
     public Joystick GetJoystick => mainJoystick;
     public Camera GetMainCamera => mainCamera;
     public AssetManager GetAssetManager => assetManager;
-
     public static GameManager Instance { get; private set; }
     
     // Start is called before the first frame update
@@ -39,8 +38,8 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        //Screen.SetResolution(1200, 600, true);
-        //Application.targetFrameRate = -1;
+        //Screen.SetResolution(1200, 600, false);
+        Application.targetFrameRate = -1;
 
         mainPlayerTransform = MainPlayer.GetComponent<Transform>();
         mainPlayerRigidbody = MainPlayer.GetComponent<Rigidbody>();
