@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour, IHitable
 {
     public Creature mainPlayerEntity { get; private set; }
+    public WeaponTriggerMelee WeaponTriggerMelee { get; private set; }
     
     private Transform currentTransform;
     private GameObject skin;
@@ -16,7 +17,7 @@ public class PlayerManager : MonoBehaviour, IHitable
     public static Transform searched;
 
     public bool IsCanMove { get; private set; }
-    public void SetHitting(bool isHitting)
+    public void SetHittingInformer(bool isHitting)
     {
         if (isHitting)
         {
@@ -38,14 +39,15 @@ public class PlayerManager : MonoBehaviour, IHitable
         playerData = Globals.MainPlayerData;
         currentTransform = GetComponent<Transform>();
         mainPlayerEntity = Globals.MainPlayerEntity;
-    
+        WeaponTriggerMelee = Weapon.CreateMeleeWeaponTrigger(currentTransform, ownerID, CreatureSides.AllGood);
+
         IsCanMove = true;
 
         switch(playerData.PlayerClass)
         {
             case 1:
                 skillOne = gameObject.AddComponent<SimpleMeleeHit1h>();
-                skillOne.SetData(mainPlayerEntity, HitAnimation, SetHitting, currentTransform);
+                skillOne.SetData(mainPlayerEntity, WeaponTriggerMelee, HitAnimation, SetHittingInformer, currentTransform);
              
                 break;
         }
@@ -110,9 +112,10 @@ public class PlayerManager : MonoBehaviour, IHitable
     public int OwnerID { get => ownerID;/*mainPlayerEntity.OwnerID;*/ }
     public float PlayerRadius { get => mainPlayerEntity.BodyRadius; }
     public Transform AimTransform { get => currentTransform; }
-    public void ReceiveHit(WeaponDamage wd)
+    public CreatureSides CreatureSide { get => mainPlayerEntity.CreatureSide; }
+    public void ReceiveHit(DamageOutput wd)
     {
-        print("damage: " + wd.DamageAmount);
+        print("damage: " + wd.FinalDamageAmount);
         StartCoroutine(receiveHit());
     }
     private IEnumerator receiveHit()

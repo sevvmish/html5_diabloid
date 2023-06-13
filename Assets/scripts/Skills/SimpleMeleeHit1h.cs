@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SimpleMeleeHit1h : Skill
-{
-    private float _timer;
-
+{    
     private void Awake()
     {        
         SkillName = Localization.GetInstanse().GetCurrentTranslation().Skill01Name;
@@ -16,13 +14,18 @@ public class SimpleMeleeHit1h : Skill
         DamageDistanceType = DamageDistanceTypes.melee;
     }
 
-    public override void SetData(Creature creature, Action invokeAnimation, Action<bool> invokeStatus, Transform _transform)
+    public override void SetData(Creature creature, WeaponTriggerMelee weaponTriggerMelee, Action invokeAnimation, Action<bool> invokeStatus, Transform _transform)
     {
         PlayerData = creature;
+        MainWeapon = PlayerData.MainInventory.MainWeapon;
+        SecondWeapon = PlayerData.MainInventory.MainWeapon;
+
         InvokeAnimation = invokeAnimation;
         InvokeSkillHitStatus = invokeStatus;
         mainPlayerTransform = _transform;
-        createWeaponTrigger();
+        WeaponTriggerMelee = weaponTriggerMelee;
+        MainDamageOutput = new DamageOutput(MainWeapon, PlayerData);
+        SecondDamageOutput = new DamageOutput(SecondWeapon, PlayerData);
     }
 
     
@@ -53,14 +56,15 @@ public class SimpleMeleeHit1h : Skill
     }
     private IEnumerator attack()
     {
-        
+        WeaponTriggerMelee.UpdateConditions(Distance, 1, MainDamageOutput);
+
         SetCooldown(true);
         InvokeSkillHitStatus?.Invoke(true);
-        WeaponTrigger.SetActive(true);
+        WeaponTriggerMelee.gameObject.SetActive(true);
         
         yield return new WaitForSeconds(Time.fixedDeltaTime);
         
-        WeaponTrigger.SetActive(false);
+        WeaponTriggerMelee.gameObject.SetActive(false);
         InvokeAnimation?.Invoke();
         
         yield return new WaitForSeconds(0.6f);

@@ -85,7 +85,7 @@ public class PlayerInputControl : MonoBehaviour
                         
                         IHitable hitable = hit.collider.GetComponent<IHitable>();
                         
-                        if (hitable.OwnerID != playerManager.OwnerID)
+                        if (hitable.OwnerID != playerManager.OwnerID && hitable.CreatureSide != playerManager.CreatureSide)
                         {
                             
                             if (!playerManager.SkillOneAttack(hitable))
@@ -98,7 +98,12 @@ public class PlayerInputControl : MonoBehaviour
                                 destinationPoint = mainPlayerTransform.position;
                             }
                             
-                        }                        
+                        }     
+                        else
+                        {
+                            destinationPoint = hit.collider.gameObject.transform.position;
+                            deltaLimit = hitable.PlayerRadius;
+                        }
                     }
                 }
             }

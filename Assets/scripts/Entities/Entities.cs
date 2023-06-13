@@ -14,6 +14,7 @@ public abstract class Creature
     public float CurrentHealth { get; private set; }
     public float MaxHealth { get { return Stamina * StaminaModifierForHealth; } }
     public CreatureTypes CreatureType { get; private set; }
+    public CreatureSides CreatureSide { get; private set; }
     public float CurrentSpeed { get; private set; }
     public float MaxSpeed { get; private set; }
     public MainPlayerClasses MainPlayerClass { get; private set; }
@@ -37,7 +38,6 @@ public abstract class Creature
     public void SetInventory(Inventory inventory)
     {
         MainInventory = inventory;
-
     }
         
 
@@ -51,6 +51,7 @@ public abstract class Creature
         float MaxSpeed,
         float BodyRadius,
         CreatureTypes CreatureType,
+        CreatureSides CreatureSide,
         MainPlayerClasses MainPlayerClass
 
         )
@@ -65,6 +66,7 @@ public abstract class Creature
         this.MaxSpeed = MaxSpeed;
         this.BodyRadius = BodyRadius;
         this.CreatureType = CreatureType;
+        this.CreatureSide = CreatureSide;
         this.MainPlayerClass = MainPlayerClass;
         MainInventory = new Inventory();
         CurrentHealth = MaxHealth;        
@@ -88,6 +90,7 @@ public class Barbarian : Creature
         1, //MaxSpeed
         0.3f, //body radius
         CreatureTypes.MainPlayer, 
+        CreatureSides.AllGood,
         MainPlayerClasses.Barbarian
         )
     {
@@ -105,6 +108,7 @@ public class Barbarian : Creature
         1, //MaxSpeed
         0.4f, //body radius
         CreatureTypes.MainPlayer,
+        CreatureSides.AllGood,
         (MainPlayerClasses)playerClass
         )
     {
@@ -119,14 +123,10 @@ public interface IHitable
 {
     int OwnerID { get; }
     float PlayerRadius { get; }
-    void ReceiveHit(WeaponDamage wd);
+    void ReceiveHit(DamageOutput damage);
     Transform AimTransform { get; }
+    CreatureSides CreatureSide { get; }
 }
-
-
-
-
-
 
 
 
@@ -136,6 +136,12 @@ public enum CreatureTypes
     Human,
     Skeleton,
     Undead
+}
+
+public enum CreatureSides
+{
+    AllGood,
+    AllBad
 }
 
 public enum MainPlayerClasses

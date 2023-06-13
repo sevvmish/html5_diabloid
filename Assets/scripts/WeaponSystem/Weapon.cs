@@ -6,27 +6,29 @@ using System;
 public class Weapon
 {
     public WeaponTypes WeaponTypes { get; private set; }
-    public WeaponDamage WeaponDamage { get; private set; }
+    public DamageDistanceTypes DamageDistanceType { get; private set; }
+    public DamageTypes DamageType { get; private set; }
+    public float DamageAmountMin { get; private set; }
+    public float DamageAmountMax { get; private set; }
     public string Name { get; private set; }
     public GameObject WeaponSkin { get; private set; }
 
-    public Weapon(WeaponTypes weaponTypes, float damageAmountMin, float damageAmountMax, string name, int gameObjectID)
+    public Weapon(WeaponTypes weaponTypes, DamageDistanceTypes damageDistanceType, DamageTypes damageType, float damageAmountMin, float damageAmountMax, string name, int gameObjectID)
     {
         WeaponTypes = weaponTypes;
+        DamageDistanceType = damageDistanceType;
+        DamageType = damageType;
         Name = name;
         WeaponSkin = null;//GameManager.Instance.GetAssetManager.GetWeaponPack(gameObjectID);
-        WeaponDamage = new WeaponDamage();
-
-        switch (weaponTypes)
-        {
-            case WeaponTypes.sword1h:
-                WeaponDamage = new WeaponDamage(DamageDistanceTypes.melee, DamageTypes.melee, damageAmountMin, damageAmountMax, 1.5f);
-                break;
-        }
+        DamageAmountMin = damageAmountMin;
+        DamageAmountMax = damageAmountMax;
     }
 
-    public void SetWeaponDamageAmount(float damageAmountMin, float damageAmountMax) 
-        => WeaponDamage.SetWeaponDamageAmount(damageAmountMin, damageAmountMax);
+    public void SetWeaponDamageAmount(float damageAmountMin, float damageAmountMax)
+    {
+        DamageAmountMin = damageAmountMin;
+        DamageAmountMax = damageAmountMax;
+    }        
     
     public Weapon() { }
 
@@ -38,41 +40,32 @@ public class Weapon
             case 0: //-
                 return null;
             case 1: //short sword
-                return new Weapon(WeaponTypes.sword1h, damageAmountMin, damageAmountMax, translation.ShortSword, 1);
+                return new Weapon(WeaponTypes.sword1h, DamageDistanceTypes.melee, DamageTypes.melee, 
+                    damageAmountMin, damageAmountMax, translation.ShortSword, 1);
         }
 
         throw new NotImplementedException();
     }
+
+    public static WeaponTriggerMelee CreateMeleeWeaponTrigger(Transform mainPlayerTransform, int ownerID, CreatureSides side)
+    {
+        GameObject WeaponTrigger = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        WeaponTrigger.transform.parent = mainPlayerTransform;
+        WeaponTrigger.GetComponent<SphereCollider>().isTrigger = true;
+        WeaponTrigger.GetComponent<MeshRenderer>().enabled = false;
+        //Destroy(WeaponTrigger.GetComponent<MeshFilter>());
+        WeaponTrigger.transform.localScale = Vector3.one;
+        WeaponTrigger.transform.localPosition = new Vector3(0, 0.5f, 0);
+
+        WeaponTriggerMelee result = WeaponTrigger.AddComponent<WeaponTriggerMelee>();
+        WeaponTrigger.SetActive(false);
+        result.SetBaseConditions(ownerID, mainPlayerTransform, CreatureSides.AllGood);
+        return result;
+    }
 }
 
 
-public class WeaponDamage
-{
-    public WeaponDamage() { }
 
-    public WeaponDamage(DamageDistanceTypes damageDistanceType, DamageTypes damageType, 
-        float damageAmountMin, float damageAmountMax, float damageDistance)
-    {
-        DamageDistanceType = damageDistanceType;
-        DamageType = damageType;
-        DamageAmountMin = damageAmountMin;
-        DamageAmountMax = damageAmountMax;
-        DamageDistance = damageDistance;
-    }
-
-    public void SetWeaponDamageAmount(float damageAmountMin, float damageAmountMax)
-    {
-        DamageAmountMin = damageAmountMin;
-        DamageAmountMax = damageAmountMax;
-    }
-
-    public DamageDistanceTypes DamageDistanceType { get; private set; }
-    public DamageTypes DamageType { get; private set; }
-    public float DamageAmountMin { get; private set; }
-    public float DamageAmountMax { get; private set; }
-    public float DamageDistance { get; private set; }
-    public float DamageAmount { get => UnityEngine.Random.Range(DamageAmountMin, DamageAmountMax); }
-}
 
 public enum DamageDistanceTypes
 {
