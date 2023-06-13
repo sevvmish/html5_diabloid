@@ -7,7 +7,7 @@ public class PlayerData
 {
     public int Level;
     public int PlayerClass;
-    public string Name;
+    public string PlayerName;
 
     public int MainWeaponID;
     public float MainWeaponMinDamage;

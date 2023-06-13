@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Globals : MonoBehaviour
+
+public class Globals: MonoBehaviour 
 {
     public static bool IsJoystick;
     public static PlayerData MainPlayerData;
+    public static Creature MainPlayerEntity;
 
-    public static Creature GetPlayerEntity()
+    public static void GetPlayerEntity()
     {
         SaveLoad.LoadMainPlayer();
         int level = MainPlayerData.Level;
@@ -17,15 +19,18 @@ public class Globals : MonoBehaviour
         switch ((MainPlayerClasses)playerClass)
         {
             case MainPlayerClasses.Barbarian:
-                return new Barbarian(level, 1);
+                MainPlayerEntity = new Barbarian(level, 1);
+                break;
 
             case MainPlayerClasses.Mage:
-                return new Barbarian(level, 2);
+                MainPlayerEntity = new Barbarian(level, 2);
+                break;
 
             case MainPlayerClasses.Rogue:
-                return new Barbarian(level, 3);
+                MainPlayerEntity=  new Barbarian(level, 3);
+                break;
         }
 
-        throw new NotImplementedException();
+        MainPlayerEntity.SetInventory(new Inventory(MainPlayerData));
     }
 }

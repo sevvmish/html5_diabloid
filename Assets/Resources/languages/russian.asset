@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8eac93490a7ad42acf7db62968a5ae, type: 3}
   m_Name: russian
   m_EditorClassIdentifier: 
-  PlayerClassName: 
+  BarbarianClassName: "\u0412\u0410\u0420\u0412\u0410\u0420"
+  MageClassName: "\u041C\u0410\u0413"
+  RogueClassName: "\u0420\u0410\u0417\u0411\u041E\u0419\u041D\u0418\u041A"
+  ShortSword: "\u043A\u043E\u0440\u043E\u0442\u043A\u0438\u0439 \u043C\u0435\u0447"

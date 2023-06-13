@@ -2,66 +2,86 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-50)]
 public class PlayerManager : MonoBehaviour, IHitable
 {
     public Creature mainPlayerEntity { get; private set; }
-
+    
     private Transform currentTransform;
     private GameObject skin;
-    private Animator animator;
-    private WeaponManager weaponManager;
+    private AnimationManager animationManager;
     private PlayerData playerData;
+    private int ownerID;
+
+    public static Transform searched;
 
     public bool IsCanMove { get; private set; }
+    public void SetHitting(bool isHitting)
+    {
+        if (isHitting)
+        {
+            IsCanMove = false;
+        }
+        else
+        {
+            IsCanMove = true;
+        }
+    }
 
     //skills
-    
+    private Skill skillOne;
 
     // Start is called before the first frame update
     void Start()
     {
-        mainPlayerEntity = Globals.GetPlayerEntity();
+        ownerID = UnityEngine.Random.Range(-100000, 100000);
         playerData = Globals.MainPlayerData;
-        mainPlayerEntity.SetInventory(new Inventory(playerData));
-
-        IsCanMove = true;
-        weaponManager = GetComponent<WeaponManager>();
-        weaponManager.SetPlayerData(mainPlayerEntity);
-
         currentTransform = GetComponent<Transform>();
-        skin = Instantiate(GameManager.Instance.GetAssetManager.GetPlayerSkinPack(1), transform.position, Quaternion.identity, currentTransform);
-        
-        animator = skin.GetComponent<Animator>();
-    }
-
+        mainPlayerEntity = Globals.MainPlayerEntity;
     
+        IsCanMove = true;
 
-    public void IdleAnimation()
-    {
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        switch(playerData.PlayerClass)
         {
-            animator.Play("Idle");
-        }            
+            case 1:
+                skillOne = gameObject.AddComponent<SimpleMeleeHit1h>();
+                skillOne.SetData(mainPlayerEntity, HitAnimation, SetHitting, currentTransform);
+             
+                break;
+        }
+        
+        skin = Instantiate(GameManager.Instance.GetAssetManager.GetPlayerSkinPack(1), transform.position, Quaternion.identity, currentTransform);
+                
+        animationManager = gameObject.AddComponent<AnimationManager>();
+        animationManager.SetData(skin.GetComponent<Animator>(), this);
+
+        ReturnChildOfParent(this.transform, "R_hand_container");
+
     }
 
-    public void RunAnimation()
-    {
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
-        {
-            animator.Play("Run");
-        }            
+    public void PlayIdleAnimation()
+    {        
+        animationManager.IdleAnimation();
     }
+
+    public void PlayRunAnimation()
+    {
+        if (!IsCanMove) return;
+        animationManager.RunAnimation();
+    }
+
+    public void HitAnimation()
+    {
+        animationManager.HitAnimation();
+    }
+
+
 
     public bool SkillOneAttack(IHitable aim)
-    {
-        return weaponManager.Attack(aim);
+    {        
+        return skillOne.ExecuteSkill(aim);
     }
-
-    public bool SkillOneAttack()
-    {
-        return weaponManager.Attack();
-    }
-
+        
     public bool SkillTwoAttack()
     {
         //todo
@@ -87,18 +107,32 @@ public class PlayerManager : MonoBehaviour, IHitable
     }
 
     //HITABLE============================================================
-    public PlayerManager owner { get => this; }
-    public float PlayerRadius { get => 1f; }
-
+    public int OwnerID { get => ownerID;/*mainPlayerEntity.OwnerID;*/ }
+    public float PlayerRadius { get => mainPlayerEntity.BodyRadius; }
+    public Transform AimTransform { get => currentTransform; }
     public void ReceiveHit(WeaponDamage wd)
     {
-        print("player " + gameObject.name + " received hit: " + wd.DamageDistanceType + " = " + wd.DamageType + " = " + wd.DamageAmount);
+        print("damage: " + wd.DamageAmount);
         StartCoroutine(receiveHit());
     }
     private IEnumerator receiveHit()
-    {
-        IsCanMove = false;
+    {        
         yield return new WaitForSeconds(0.2f);
-        IsCanMove = true;
+        
+    }
+
+    public static void ReturnChildOfParent(Transform parent, string _name)
+    {
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            if (parent.GetChild(i).name == _name)
+            {
+                searched = parent.GetChild(i);
+            }
+            else if (parent.GetChild(i).childCount > 0)
+            {
+                ReturnChildOfParent(parent.GetChild(i), _name);
+            }
+        }
     }
 }

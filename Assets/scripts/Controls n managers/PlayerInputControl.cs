@@ -29,7 +29,7 @@ public class PlayerInputControl : MonoBehaviour
         joystick = GameManager.Instance.GetJoystick;
         playerRigidbody = GameManager.Instance.mainPlayerRigidbody;
         mainPlayerTransform = GameManager.Instance.mainPlayerTransform;
-        mainCamera = GameManager.Instance.GetMainCamera;        
+        mainCamera = GameManager.Instance.GetMainCamera;
         playerManager = GetComponent<PlayerManager>();
 
         if (!isJoystick)
@@ -82,11 +82,23 @@ public class PlayerInputControl : MonoBehaviour
                     }
                     else if (hit.collider.GetComponent<IHitable>() != null)
                     {
+                        
                         IHitable hitable = hit.collider.GetComponent<IHitable>();
-
-                        playerManager.SkillOneAttack(hitable);
-                        destinationPoint = hitable.owner.transform.position;
-                        deltaLimit = hitable.PlayerRadius;
+                        
+                        if (hitable.OwnerID != playerManager.OwnerID)
+                        {
+                            
+                            if (!playerManager.SkillOneAttack(hitable))
+                            {                                
+                                destinationPoint = hit.collider.gameObject.transform.position;
+                                deltaLimit = hitable.PlayerRadius;
+                            }
+                            else
+                            {                               
+                                destinationPoint = mainPlayerTransform.position;
+                            }
+                            
+                        }                        
                     }
                 }
             }
@@ -119,17 +131,17 @@ public class PlayerInputControl : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-            playerManager.SkillOneAttack();
+            playerManager.SkillOneAttack(null);
         }
 
         //animator data about run-idle
         if (playerRigidbody.velocity.magnitude>0.2f)
         {
-            playerManager.RunAnimation();
+            playerManager.PlayRunAnimation();
         }
         else
         {
-            playerManager.IdleAnimation();
+            playerManager.PlayIdleAnimation();
         }
     }
 

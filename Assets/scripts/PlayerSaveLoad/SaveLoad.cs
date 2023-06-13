@@ -11,13 +11,27 @@ public class SaveLoad
 
     public static void LoadMainPlayer()
     {
-        Globals.MainPlayerData = new PlayerData();
-        loadFromPrefs(Globals.MainPlayerData);
+        Globals.MainPlayerData = loadFromPrefs();
+        /*
+        PlayerData player = new PlayerData();
+        player.Level = 1;
+        player.PlayerClass = 1;
+        player.PlayerName = "Player";
+
+        player.MainWeaponID = 1;
+        player.MainWeaponMinDamage = 3;
+        player.MainWeaponMaxDamage = 5;
+
+        player.SecondWeaponID = 0;
+        player.SecondWeaponMinDamage = 0;
+        player.SecondWeaponMaxDamage = 0;
+        Globals.MainPlayerData = player;*/
     }
 
-    private static void loadFromPrefs(PlayerData player)
+    private static PlayerData loadFromPrefs()
     {
-        int saverID = 2;
+        PlayerData player = new PlayerData();
+        int saverID = 14;
 
         //main data
         if (PlayerPrefs.GetInt("SaverId") == saverID)
@@ -25,16 +39,15 @@ public class SaveLoad
             Debug.Log("save file is OK!");
             player.Level = PlayerPrefs.GetInt("Level");
             player.PlayerClass = PlayerPrefs.GetInt("PlayerClass");
-            player.Name = PlayerPrefs.GetString("Name");
+            player.PlayerName = PlayerPrefs.GetString("PlayerName");
             
-            player.MainWeaponID = PlayerPrefs.GetInt("MainWeapon");
+            player.MainWeaponID = PlayerPrefs.GetInt("MainWeaponID");
             player.MainWeaponMinDamage = PlayerPrefs.GetFloat("MainWeaponMinDamage");
             player.MainWeaponMaxDamage = PlayerPrefs.GetFloat("MainWeaponMaxDamage");
 
             player.SecondWeaponID = PlayerPrefs.GetInt("SecondWeaponID");
             player.SecondWeaponMinDamage = PlayerPrefs.GetFloat("SecondWeaponMinDamage");
             player.SecondWeaponMaxDamage = PlayerPrefs.GetFloat("SecondWeaponMaxDamage");
-
 
         }
         else
@@ -43,7 +56,7 @@ public class SaveLoad
             PlayerPrefs.SetInt("SaverId", saverID);
             player.Level = 1;
             player.PlayerClass = 1;
-            player.Name = "Player";
+            player.PlayerName = "Player";
             
             player.MainWeaponID = 1;
             player.MainWeaponMinDamage = 3;
@@ -54,20 +67,20 @@ public class SaveLoad
             player.SecondWeaponMaxDamage = 0;
 
             saveToPrefs(player);
+
         }
 
-        
-
-        
+        return player;        
     }
 
     private static void saveToPrefs(PlayerData player)
     {
+        
         PlayerPrefs.SetInt("Level", player.Level);
         PlayerPrefs.SetInt("PlayerClass", player.PlayerClass);
-        PlayerPrefs.SetString("Name", player.Name);
+        PlayerPrefs.SetString("PlayerName", player.PlayerName);
         
-        PlayerPrefs.SetInt("MainWeapon", player.MainWeaponID);
+        PlayerPrefs.SetInt("MainWeaponID", player.MainWeaponID);
         PlayerPrefs.SetFloat("MainWeaponMinDamage", player.MainWeaponMinDamage);
         PlayerPrefs.SetFloat("MainWeaponMaxDamage", player.MainWeaponMaxDamage);
 
@@ -75,4 +88,6 @@ public class SaveLoad
         PlayerPrefs.SetFloat("SecondWeaponMinDamage", player.SecondWeaponMinDamage);
         PlayerPrefs.SetFloat("SecondWeaponMaxDamage", player.SecondWeaponMaxDamage);
     }
+
+    
 }

@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 public abstract class Creature
 {
     public int Level { get; private set; } = 1;
     public void SetLevel(int level) => Level = level;
+
+    public int OwnerID { get; private set; }
+    public float BodyRadius { get; private set; }
 
     public float CurrentHealth { get; private set; }
     public float MaxHealth { get { return Stamina * StaminaModifierForHealth; } }
@@ -29,8 +33,13 @@ public abstract class Creature
     public float Stamina { get { return StaminaModifier * Level; } }
     public float StaminaModifier { get; private set; }
     public float StaminaModifierForHealth { get; private set; }
-    public Inventory Inventory { get; private set; }
-    public void SetInventory(Inventory inventory) => Inventory = inventory;
+    public Inventory MainInventory { get; private set; }
+    public void SetInventory(Inventory inventory)
+    {
+        MainInventory = inventory;
+
+    }
+        
 
     public Creature(
         int Level,
@@ -40,11 +49,13 @@ public abstract class Creature
         float StaminaModifier,
         float StaminaModifierForHealth,
         float MaxSpeed,
+        float BodyRadius,
         CreatureTypes CreatureType,
         MainPlayerClasses MainPlayerClass
 
         )
     {
+        OwnerID = UnityEngine.Random.Range(-100000, 100000);
         this.Level = Level;
         this.StrengthModifier = StrengthModifier;
         this.AgilityModifier = AgilityModifier;
@@ -52,9 +63,10 @@ public abstract class Creature
         this.StaminaModifier = StaminaModifier;
         this.StaminaModifierForHealth = StaminaModifierForHealth;
         this.MaxSpeed = MaxSpeed;
+        this.BodyRadius = BodyRadius;
         this.CreatureType = CreatureType;
         this.MainPlayerClass = MainPlayerClass;
-
+        MainInventory = new Inventory();
         CurrentHealth = MaxHealth;        
     }
 
@@ -74,6 +86,7 @@ public class Barbarian : Creature
         1, //StaminaModifier
         10, //StaminaModifierForHealth
         1, //MaxSpeed
+        0.3f, //body radius
         CreatureTypes.MainPlayer, 
         MainPlayerClasses.Barbarian
         )
@@ -90,6 +103,7 @@ public class Barbarian : Creature
         1, //StaminaModifier
         10, //StaminaModifierForHealth
         1, //MaxSpeed
+        0.4f, //body radius
         CreatureTypes.MainPlayer,
         (MainPlayerClasses)playerClass
         )
@@ -103,9 +117,10 @@ public class Barbarian : Creature
 
 public interface IHitable
 {
-    PlayerManager owner { get; }
+    int OwnerID { get; }
     float PlayerRadius { get; }
     void ReceiveHit(WeaponDamage wd);
+    Transform AimTransform { get; }
 }
 
 

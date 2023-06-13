@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform mainCameraTransform;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private AssetManager assetManager;
-    //[SerializeField] private Camera MinimapCamera;
     [SerializeField] private Light MainLight;
 
     //todel
@@ -29,6 +28,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Globals.GetPlayerEntity();
+        
+
         if (Instance != null && Instance != this)
         {
             Destroy(this);
@@ -49,12 +51,6 @@ public class GameManager : MonoBehaviour
         MainLight.intensity = 1.0f;
 
         texter.text = SystemInfo.deviceType.ToString();
-
-        Barbarian b = new Barbarian();
-        Creature cr = b;
-
-        print(b.CurrentEnergy + " = " + b.CurrentHealth + " = " + b.StaminaModifier);
-        print(cr.CurrentEnergy + " = " + cr.CurrentHealth);
     }
 
 }

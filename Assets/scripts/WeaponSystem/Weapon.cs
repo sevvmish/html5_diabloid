@@ -14,13 +14,13 @@ public class Weapon
     {
         WeaponTypes = weaponTypes;
         Name = name;
-        WeaponSkin = GameManager.Instance.GetAssetManager.GetWeaponPack(gameObjectID);
+        WeaponSkin = null;//GameManager.Instance.GetAssetManager.GetWeaponPack(gameObjectID);
         WeaponDamage = new WeaponDamage();
 
         switch (weaponTypes)
         {
             case WeaponTypes.sword1h:
-                WeaponDamage.SetWeaponDamage(DamageDistanceTypes.melee, DamageTypes.melee, damageAmountMin, damageAmountMax, 1.5f);
+                WeaponDamage = new WeaponDamage(DamageDistanceTypes.melee, DamageTypes.melee, damageAmountMin, damageAmountMax, 1.5f);
                 break;
         }
     }
@@ -31,7 +31,7 @@ public class Weapon
     public Weapon() { }
 
     public static Weapon GetFastWeaponById(int id, float damageAmountMin, float damageAmountMax)
-    {
+    {        
         Translation translation = Localization.GetInstanse().GetCurrentTranslation();
         switch(id)
         {
@@ -50,7 +50,7 @@ public class WeaponDamage
 {
     public WeaponDamage() { }
 
-    public void SetWeaponDamage(DamageDistanceTypes damageDistanceType, DamageTypes damageType, 
+    public WeaponDamage(DamageDistanceTypes damageDistanceType, DamageTypes damageType, 
         float damageAmountMin, float damageAmountMax, float damageDistance)
     {
         DamageDistanceType = damageDistanceType;

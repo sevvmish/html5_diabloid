@@ -12,4 +12,8 @@ public class Translation : ScriptableObject
 
     //weapons
     public string ShortSword;
+
+    //skills
+    public string Skill01Name;
+    public string Skill01Description;
 }
