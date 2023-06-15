@@ -1711,7 +1711,6 @@ GameObject:
   m_Component:
   - component: {fileID: 903768395}
   - component: {fileID: 903768393}
-  - component: {fileID: 903768394}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -1770,14 +1769,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &903768394
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 903768392}
-  m_Enabled: 1
 --- !u!4 &903768395
 Transform:
   m_ObjectHideFlags: 0
@@ -1924,7 +1915,6 @@ MonoBehaviour:
   mainJoystick: {fileID: 705231874}
   mainCameraTransform: {fileID: 623258413}
   mainCamera: {fileID: 903768393}
-  assetManager: {fileID: 6454140587226839399, guid: fd5dcbf2a8e1e6d47aea37671a91d001, type: 3}
   MainLight: {fileID: 732552805}
   texter: {fileID: 1506031983}
 --- !u!4 &1086663448
@@ -2496,6 +2486,7 @@ GameObject:
   - component: {fileID: 1525731972}
   - component: {fileID: 1525731975}
   - component: {fileID: 1525731976}
+  - component: {fileID: 1525731977}
   m_Layer: 6
   m_Name: Main Player
   m_TagString: Untagged
@@ -2592,6 +2583,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78570a9b6e66d6647bbcde9b138a549b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!81 &1525731977
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525731971}
+  m_Enabled: 1
 --- !u!1 &1537402329
 GameObject:
   m_ObjectHideFlags: 0

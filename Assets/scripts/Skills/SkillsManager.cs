@@ -34,14 +34,15 @@ public abstract class Skill : MonoBehaviour
     public Action<bool> InvokeSkillHitStatus { get; set; }
     public Transform mainPlayerTransform { get;  set; }
     public bool IsCooldownActive { get;  set; }
-    public void SetCooldown(bool isCooldown) { IsCooldownActive = isCooldown;}
+    public void SetSkillCooldown(bool isCooldown) { IsCooldownActive = isCooldown;}
     public WeaponTriggerMelee WeaponTriggerMelee { get;  set; }
+    public EffectsManager EffectsManager { get; set; }
 
     public Skill() { }
 
     
 
     public abstract bool ExecuteSkill(IHitable aim);
-    public abstract void SetData(Creature creature, WeaponTriggerMelee weaponTriggerMelee, Action invokeAnimation, Action<bool> InvokeSkillHitStatus, Transform _transform);
+    public abstract void SetData(Creature creature, WeaponTriggerMelee weaponTriggerMelee, EffectsManager effectsManager, Action invokeAnimation, Transform _transform);
 }
 

@@ -10,20 +10,20 @@ public class SimpleMeleeHit1h : Skill
         SkillName = Localization.GetInstanse().GetCurrentTranslation().Skill01Name;
         SkillDescription = Localization.GetInstanse().GetCurrentTranslation().Skill01Description;
         Distance = 1.5f;
-        Cooldown = 1;
+        Cooldown = 0.7f;
         DamageDistanceType = DamageDistanceTypes.melee;
     }
 
-    public override void SetData(Creature creature, WeaponTriggerMelee weaponTriggerMelee, Action invokeAnimation, Action<bool> invokeStatus, Transform _transform)
+    public override void SetData(Creature creature, WeaponTriggerMelee weaponTriggerMelee, EffectsManager effectsManager, Action invokeAnimation, Transform _transform)
     {
         PlayerData = creature;
         MainWeapon = PlayerData.MainInventory.MainWeapon;
         SecondWeapon = PlayerData.MainInventory.MainWeapon;
 
         InvokeAnimation = invokeAnimation;
-        InvokeSkillHitStatus = invokeStatus;
         mainPlayerTransform = _transform;
         WeaponTriggerMelee = weaponTriggerMelee;
+        EffectsManager = effectsManager;
         MainDamageOutput = new DamageOutput(MainWeapon, PlayerData);
         SecondDamageOutput = new DamageOutput(SecondWeapon, PlayerData);
     }
@@ -32,6 +32,13 @@ public class SimpleMeleeHit1h : Skill
 
     public override bool ExecuteSkill(IHitable aim)
     {
+        bool isClose = (mainPlayerTransform.position - aim.AimTransform.position).magnitude <= (Distance + aim.PlayerRadius);
+
+        if (MainWeapon == null)
+        {
+            return isClose;
+        }
+
         if (aim == null)
         {
             if (!IsCooldownActive)
@@ -43,7 +50,7 @@ public class SimpleMeleeHit1h : Skill
         }
         else
         {
-            bool isClose = (mainPlayerTransform.position - aim.AimTransform.position).magnitude <= (Distance + aim.PlayerRadius);
+            
             if (!IsCooldownActive && isClose)
             {
                 StartCoroutine(attack());
@@ -56,24 +63,28 @@ public class SimpleMeleeHit1h : Skill
     }
     private IEnumerator attack()
     {
-        WeaponTriggerMelee.UpdateConditions(Distance, 1, MainDamageOutput);
+        SetSkillCooldown(true);
+        //InvokeSkillHitStatus?.Invoke(true);
+        PlayerData.IsHitting = true;
 
-        SetCooldown(true);
-        InvokeSkillHitStatus?.Invoke(true);
+        InvokeAnimation?.Invoke();
+        EffectsManager.PlaySound(SoundsType.swing1H_medium);
+        
+        WeaponTriggerMelee.UpdateConditions(Distance, 1, MainDamageOutput);        
         WeaponTriggerMelee.gameObject.SetActive(true);
         
         yield return new WaitForSeconds(Time.fixedDeltaTime);
         
         WeaponTriggerMelee.gameObject.SetActive(false);
-        InvokeAnimation?.Invoke();
+                
+        yield return new WaitForSeconds(0.4f);
+
+        //InvokeSkillHitStatus?.Invoke(false);
+        PlayerData.IsHitting = false;
+
+        yield return new WaitForSeconds(Cooldown - 0.4f);
         
-        yield return new WaitForSeconds(0.6f);
-        
-        InvokeSkillHitStatus?.Invoke(false);
-        
-        yield return new WaitForSeconds(Cooldown - 0.6f);
-        
-        SetCooldown(false);
+        SetSkillCooldown(false);
     }
 }
 

@@ -72,6 +72,44 @@ public abstract class Creature
         CurrentHealth = MaxHealth;        
     }
 
+    private bool isPlayerCanMove;
+    public bool IsPlayerCanMove
+    {
+        get
+        {
+            return isPlayerCanMove;
+        }
+
+        set
+        {
+            isPlayerCanMove = value;
+        }
+    }
+
+    private bool isHitting;
+    public bool IsHitting
+    {
+        get
+        {
+            return isHitting;
+        }
+
+        set
+        {
+            if (value)
+            {
+                isPlayerCanMove = false;
+            }
+            else
+            {
+                isPlayerCanMove = true;
+            }
+
+            isHitting = value;
+        }
+    }
+    
+
     public Creature() { }
 
     

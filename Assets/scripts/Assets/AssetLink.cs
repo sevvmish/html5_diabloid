@@ -15,7 +15,6 @@ public class AssetLink : ScriptableObject
 public class WeaponAssetLink : AssetLink
 {
     public Sprite Sprite;
-    public Weapon Weapon;
 }
 
 public enum AssetTypes

@@ -1,33 +1,24 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [DefaultExecutionOrder(-50)]
 public class PlayerManager : MonoBehaviour, IHitable
 {
     public Creature mainPlayerEntity { get; private set; }
+    public Rigidbody playerRigidbody { get; private set; }
     public WeaponTriggerMelee WeaponTriggerMelee { get; private set; }
     
     private Transform currentTransform;
-    private GameObject skin;
+    private Transform handContainer_right, handContainer_left;
+    private GameObject skin, mainWeapon, secondWeapon;
+
     private AnimationManager animationManager;
+    private EffectsManager effectsManager;
     private PlayerData playerData;
     private int ownerID;
 
     public static Transform searched;
 
-    public bool IsCanMove { get; private set; }
-    public void SetHittingInformer(bool isHitting)
-    {
-        if (isHitting)
-        {
-            IsCanMove = false;
-        }
-        else
-        {
-            IsCanMove = true;
-        }
-    }
 
     //skills
     private Skill skillOne;
@@ -38,46 +29,71 @@ public class PlayerManager : MonoBehaviour, IHitable
         ownerID = UnityEngine.Random.Range(-100000, 100000);
         playerData = Globals.MainPlayerData;
         currentTransform = GetComponent<Transform>();
+        playerRigidbody = GetComponent<Rigidbody>();
         mainPlayerEntity = Globals.MainPlayerEntity;
+        mainPlayerEntity.IsPlayerCanMove = true;
         WeaponTriggerMelee = Weapon.CreateMeleeWeaponTrigger(currentTransform, ownerID, CreatureSides.AllGood);
 
-        IsCanMove = true;
+        setPlayerSkin();
 
-        switch(playerData.PlayerClass)
-        {
-            case 1:
-                skillOne = gameObject.AddComponent<SimpleMeleeHit1h>();
-                skillOne.SetData(mainPlayerEntity, WeaponTriggerMelee, HitAnimation, SetHittingInformer, currentTransform);
-             
-                break;
-        }
-        
-        skin = Instantiate(GameManager.Instance.GetAssetManager.GetPlayerSkinPack(1), transform.position, Quaternion.identity, currentTransform);
-                
         animationManager = gameObject.AddComponent<AnimationManager>();
         animationManager.SetData(skin.GetComponent<Animator>(), this);
 
-        ReturnChildOfParent(this.transform, "R_hand_container");
-
+        setWeaponSkins();
+        setEffects();
+        setSkills();        
     }
 
-    public void PlayIdleAnimation()
-    {        
-        animationManager.IdleAnimation();
-    }
-
-    public void PlayRunAnimation()
+    private void setSkills()
     {
-        if (!IsCanMove) return;
-        animationManager.RunAnimation();
+        switch (playerData.PlayerClass)
+        {
+            case 1:
+                skillOne = gameObject.AddComponent<SimpleMeleeHit1h>();
+                skillOne.SetData(mainPlayerEntity, WeaponTriggerMelee, effectsManager, animationManager.HitAnimation, currentTransform);
+
+                break;
+        }
     }
 
-    public void HitAnimation()
+    private void setEffects()
     {
-        animationManager.HitAnimation();
+        effectsManager = Instantiate(Resources.Load<GameObject>("full effects"), transform.position, Quaternion.identity, currentTransform).GetComponent<EffectsManager>();
     }
 
+    private void setPlayerSkin()
+    {
+        skin = Instantiate(AssetManager.GetPlayerSkinByID(playerData.PlayerClass), transform.position, Quaternion.identity, currentTransform);
 
+        ReturnChildOfParent(skin.transform, "hand_container_right");
+        handContainer_right = searched;
+        searched = null;
+
+        ReturnChildOfParent(skin.transform, "hand_container_left");
+        handContainer_left = searched;
+        searched = null;
+    }
+
+    private void setWeaponSkins()
+    {
+        if (mainPlayerEntity.MainInventory.MainWeapon != null)
+        {
+            mainWeapon = Instantiate(AssetManager.GetWeaponByID(mainPlayerEntity.MainInventory.MainWeapon.WeaponSkin),
+                Vector3.zero, Quaternion.identity, handContainer_right);
+            mainWeapon.transform.localPosition = mainPlayerEntity.MainInventory.MainWeapon.LocalPosition;
+            mainWeapon.transform.localEulerAngles = mainPlayerEntity.MainInventory.MainWeapon.LocalRotation;
+            mainWeapon.transform.localScale = mainPlayerEntity.MainInventory.MainWeapon.LocalScale;
+        }
+
+        if (mainPlayerEntity.MainInventory.SecondWeapon != null)
+        {
+            secondWeapon = Instantiate(AssetManager.GetWeaponByID(mainPlayerEntity.MainInventory.SecondWeapon.WeaponSkin),
+                Vector3.zero, Quaternion.identity, handContainer_left);
+            secondWeapon.transform.localPosition = mainPlayerEntity.MainInventory.MainWeapon.LocalPosition;
+            secondWeapon.transform.localEulerAngles = mainPlayerEntity.MainInventory.MainWeapon.LocalRotation;
+            secondWeapon.transform.localScale = mainPlayerEntity.MainInventory.MainWeapon.LocalScale;
+        }
+    }
 
     public bool SkillOneAttack(IHitable aim)
     {        
@@ -116,10 +132,12 @@ public class PlayerManager : MonoBehaviour, IHitable
     public void ReceiveHit(DamageOutput wd)
     {
         print("damage: " + wd.FinalDamageAmount);
+        effectsManager.PlayRandomMeleeImpactMedium();
         StartCoroutine(receiveHit());
     }
     private IEnumerator receiveHit()
     {        
+        animationManager.DamageImpactAnimation();
         yield return new WaitForSeconds(0.2f);
         
     }

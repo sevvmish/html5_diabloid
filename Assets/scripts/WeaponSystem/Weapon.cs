@@ -11,17 +11,25 @@ public class Weapon
     public float DamageAmountMin { get; private set; }
     public float DamageAmountMax { get; private set; }
     public string Name { get; private set; }
-    public GameObject WeaponSkin { get; private set; }
+    public int WeaponSkin { get; private set; }
+    public Vector3 LocalPosition { get; private set; }
+    public Vector3 LocalRotation { get; private set; }
+    public Vector3 LocalScale { get; private set; }
 
-    public Weapon(WeaponTypes weaponTypes, DamageDistanceTypes damageDistanceType, DamageTypes damageType, float damageAmountMin, float damageAmountMax, string name, int gameObjectID)
+    public Weapon(WeaponTypes weaponTypes, DamageDistanceTypes damageDistanceType, DamageTypes damageType, 
+        float damageAmountMin, float damageAmountMax, string name, int gameObjectID, Vector3 localPosition, Vector3 localRotation, Vector3 localScale)
     {
         WeaponTypes = weaponTypes;
         DamageDistanceType = damageDistanceType;
         DamageType = damageType;
         Name = name;
-        WeaponSkin = null;//GameManager.Instance.GetAssetManager.GetWeaponPack(gameObjectID);
+        WeaponSkin = gameObjectID;
+
         DamageAmountMin = damageAmountMin;
         DamageAmountMax = damageAmountMax;
+        LocalPosition = localPosition;
+        LocalRotation = localRotation;
+        LocalScale = localScale;
     }
 
     public void SetWeaponDamageAmount(float damageAmountMin, float damageAmountMax)
@@ -41,7 +49,7 @@ public class Weapon
                 return null;
             case 1: //short sword
                 return new Weapon(WeaponTypes.sword1h, DamageDistanceTypes.melee, DamageTypes.melee, 
-                    damageAmountMin, damageAmountMax, translation.ShortSword, 1);
+                    damageAmountMin, damageAmountMax, translation.ShortSword, 1, new Vector3(1.5f, 2.4f, -14.7f), new Vector3(90, 0, 180), new Vector3(35,50,35));
         }
 
         throw new NotImplementedException();

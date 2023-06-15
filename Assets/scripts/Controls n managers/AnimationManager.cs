@@ -8,7 +8,20 @@ public class AnimationManager : MonoBehaviour
     private PlayerManager playerManager;
     private int animatorPriority;
 
-    public bool isHitting { get; private set; }
+    private void Update()
+    {
+        //animator data about run-idle
+        if (playerManager.playerRigidbody.velocity.magnitude > 0.1f)
+        {
+            RunAnimation();
+        }
+        else
+        {
+            IdleAnimation();
+        }
+    }
+
+    //public bool isHitting { get; private set; }
 
     public void SetData(Animator animator, PlayerManager manager)
     {
@@ -18,7 +31,7 @@ public class AnimationManager : MonoBehaviour
 
     public void IdleAnimation()
     {
-        if (isHitting) return;
+        if (!playerManager.mainPlayerEntity.IsPlayerCanMove) return;
 
         if (animatorPriority != 0)
         {
@@ -36,9 +49,18 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
+
+
+    public void DamageImpactAnimation()
+    {
+        if (playerManager.mainPlayerEntity.IsHitting) return;
+
+        mainAnimator.Play("DamageImpact");
+    }
+
     public void RunAnimation()
     {
-        if (isHitting) return;
+        if (!playerManager.mainPlayerEntity.IsPlayerCanMove) return;
 
         if (animatorPriority != 1)
         {
@@ -57,19 +79,19 @@ public class AnimationManager : MonoBehaviour
     }
 
     public void HitAnimation()
-    {
-        if (isHitting) return;
+    {        
         StartCoroutine(playHit());
     }
     private IEnumerator playHit()
     {
-        isHitting = true;
-        
-        mainAnimator.Play("Hit1h");
+        //isHitting = true;
+        mainAnimator.StopPlayback();
+        mainAnimator.Play("Hit1h_right");
         animatorPriority = 2;
 
-        yield return new WaitForSeconds(0.5f);
-        isHitting = false;
-        
+        yield return new WaitForSeconds(0.4f);
+        IdleAnimation();
+        //isHitting = false;
+        //animatorPriority = 0;
     }
 }

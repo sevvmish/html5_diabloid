@@ -16,4 +16,13 @@ public class Translation : ScriptableObject
     //skills
     public string Skill01Name;
     public string Skill01Description;
+
+    public string Skill02Name;
+    public string Skill02Description;
+
+    public string Skill03Name;
+    public string Skill03Description;
+
+    public string Skill04Name;
+    public string Skill04Description;
 }

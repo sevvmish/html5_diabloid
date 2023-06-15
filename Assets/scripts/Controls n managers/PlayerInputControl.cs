@@ -17,6 +17,7 @@ public class PlayerInputControl : MonoBehaviour
     private bool isJoystick = Globals.IsJoystick;
 
     private PlayerManager playerManager;
+    private Creature player;
     private float speed = 5;
     private float deltaLimit;
 
@@ -31,6 +32,7 @@ public class PlayerInputControl : MonoBehaviour
         mainPlayerTransform = GameManager.Instance.mainPlayerTransform;
         mainCamera = GameManager.Instance.GetMainCamera;
         playerManager = GetComponent<PlayerManager>();
+        player = playerManager.mainPlayerEntity;
 
         if (!isJoystick)
         {
@@ -43,7 +45,7 @@ public class PlayerInputControl : MonoBehaviour
         //joystick===================================================
         if (isJoystick)
         {
-            if (joystick.Direction.magnitude > 0f && playerManager.IsCanMove)
+            if (joystick.Direction.magnitude > 0f && player.IsPlayerCanMove)
             {
                 mainPlayerTransform.DOLocalRotate(new Vector3(0, Mathf.Atan2(joystick.Horizontal, joystick.Vertical) * 180 / Mathf.PI, 0), 0.1f);
                 if (playerRigidbody.velocity.magnitude < speed)
@@ -69,7 +71,7 @@ public class PlayerInputControl : MonoBehaviour
         if (!isJoystick)
         {
             
-            if (Input.GetMouseButton(0) && playerManager.IsCanMove)
+            if (Input.GetMouseButton(0) && player.IsPlayerCanMove)
             {                
                 ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -85,7 +87,7 @@ public class PlayerInputControl : MonoBehaviour
                         
                         IHitable hitable = hit.collider.GetComponent<IHitable>();
                         
-                        if (hitable.OwnerID != playerManager.OwnerID && hitable.CreatureSide != playerManager.CreatureSide)
+                        if (hitable.OwnerID != playerManager.OwnerID/* && hitable.CreatureSide != playerManager.CreatureSide*/)
                         {
                             
                             if (!playerManager.SkillOneAttack(hitable))
@@ -117,7 +119,7 @@ public class PlayerInputControl : MonoBehaviour
             float distance = (new Vector3(mainPlayerTransform.position.x, 0, mainPlayerTransform.position.z)
                 - new Vector3(destinationPoint.x, 0, destinationPoint.z)).magnitude;
 
-            if (distance > deltaLimit && playerManager.IsCanMove)
+            if (distance > deltaLimit && player.IsPlayerCanMove)
             {
                 movementToPoint(destinationPoint);
             }
@@ -139,19 +141,11 @@ public class PlayerInputControl : MonoBehaviour
             playerManager.SkillOneAttack(null);
         }
 
-        //animator data about run-idle
-        if (playerRigidbody.velocity.magnitude>0.2f)
-        {
-            playerManager.PlayRunAnimation();
-        }
-        else
-        {
-            playerManager.PlayIdleAnimation();
-        }
+        
     }
 
     private void movementToPoint(Vector3 point)
-    {
+    {        
         isStopped = false;
 
         Vector2 dir = new Vector2(point.x - mainPlayerTransform.position.x, point.z - mainPlayerTransform.position.z);

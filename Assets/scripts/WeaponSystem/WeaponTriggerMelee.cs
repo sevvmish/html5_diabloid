@@ -23,7 +23,7 @@ public class WeaponTriggerMelee : MonoBehaviour
         {
             IHitable h = other.GetComponent<IHitable>();
 
-            if (h != null && h.OwnerID != ownerID && h.CreatureSide == aimEnemies)
+            if (h != null && h.OwnerID != ownerID /*&& h.CreatureSide == aimEnemies*/)
             {                
                 player.DOLookAt(new Vector3(h.AimTransform.position.x, 0, h.AimTransform.position.z), 0.1f);
                 h.ReceiveHit(weaponDamage);

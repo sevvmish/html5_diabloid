@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Joystick mainJoystick;
     [SerializeField] private Transform mainCameraTransform;
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private AssetManager assetManager;
     [SerializeField] private Light MainLight;
 
     //todel
@@ -19,10 +18,8 @@ public class GameManager : MonoBehaviour
     public Transform mainPlayerTransform { get; private set; }
     public Rigidbody mainPlayerRigidbody { get; private set; }
     public Transform cameraBody { get; private set; }
-    //public Transform minimapCameraBody { get; private set; }
     public Joystick GetJoystick => mainJoystick;
     public Camera GetMainCamera => mainCamera;
-    public AssetManager GetAssetManager => assetManager;
     public static GameManager Instance { get; private set; }
     
     // Start is called before the first frame update
@@ -40,7 +37,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        //Screen.SetResolution(1200, 600, false);
+        //Screen.SetResolution(1200, 600, false);        
         Application.targetFrameRate = -1;
 
         mainPlayerTransform = MainPlayer.GetComponent<Transform>();
@@ -50,7 +47,18 @@ public class GameManager : MonoBehaviour
         //MinimapCamera.orthographicSize = 20;
         MainLight.intensity = 1.0f;
 
-        texter.text = SystemInfo.deviceType.ToString();
+        string message = "";
+
+        if (Application.isMobilePlatform)
+        {
+            message = "its mobile";
+        }
+        else
+        {
+            message = "its PC";
+        }
+
+        texter.text = message;
     }
 
 }
