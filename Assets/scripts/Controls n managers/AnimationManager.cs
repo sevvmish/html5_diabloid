@@ -54,8 +54,20 @@ public class AnimationManager : MonoBehaviour
         
         if (player.IsHitting) return;
         
+        switch(UnityEngine.Random.Range(0,3))
+        {
+            case 0:
+                mainAnimator.Play("DamageImpact");
+                break;
+            case 1:
+                mainAnimator.Play("DamageImpact 0");
+                break;
+            case 2:
+                mainAnimator.Play("DamageImpact 1");
+                break;
+        }
 
-        mainAnimator.Play("DamageImpact");
+        
     }
 
     public void RunAnimation()

@@ -42,5 +42,7 @@ public class EnemyManager : MonoBehaviour, IHitable
     public void ReceiveHit(DamageOutput damage)
     {
         print("damage: " + damage.FinalDamageAmount);
+        EnemyEntity.AnimationManager.DamageImpactAnimation();
+        EnemyEntity.EffectsManager.PlaySound(SoundsType.meleeImpactMediumMoreBlunt);
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using static UnityEngine.InputManagerEntry;
 
 [DefaultExecutionOrder(-50)]
 [RequireComponent(typeof(Rigidbody))]
@@ -17,16 +16,24 @@ public class PlayerManager : MonoBehaviour, IHitable
 
     // Start is called before the first frame update
     void Start()
-    {        
-        //playerData = Globals.MainPlayerData;
-        mainPlayerEntity = Globals.MainPlayerEntity;
+    {
+        mainPlayerEntity = GameManager.Instance.MainPlayerEntity;
         PlayerCustomization.InitPlayerData(mainPlayerEntity, gameObject);
 
         PlayerCustomization.SetWeaponSkins(mainPlayerEntity, ref mainWeapon, ref secondWeapon);
-        PlayerCustomization.SetSkills(mainPlayerEntity, gameObject, ref skillOne);        
+        PlayerCustomization.SetSkills(mainPlayerEntity, gameObject, ref skillOne);
+
+        print(mainPlayerEntity.CurrentHealth + " = " + mainPlayerEntity.MaxHealth);
     }
 
-    
+    //to delete
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            mainPlayerEntity.ChangeCurrentHP(-7);
+        }
+    }
 
     public bool SkillOneAttack(IHitable aim)
     {        

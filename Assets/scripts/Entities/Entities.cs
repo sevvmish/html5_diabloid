@@ -12,7 +12,10 @@ public abstract class Creature
     public float BodyRadius { get; private set; }
 
     public float CurrentHealth { get; private set; }
-    public float MaxHealth { get { return Stamina * StaminaModifierForHealth; } }
+    public float MaxHealth { get { return (minHealthAmount + Stamina * StaminaModifierForHealth); } }
+    private readonly float minHealthAmount;
+    public void ChangeCurrentHP(float amount) => CurrentHealth += amount;
+    
     public CreatureTypes CreatureType { get; private set; }
     public CreatureSides CreatureSide { get; private set; }
     public float CurrentSpeed { get; private set; }
@@ -90,7 +93,10 @@ public abstract class Creature
         this.CreatureSide = CreatureSide;
         this.MainPlayerClass = MainPlayerClass;
         MainInventory = new Inventory();
-        CurrentHealth = MaxHealth;        
+        
+
+        minHealthAmount = 40;
+        CurrentHealth = MaxHealth;
     }
 
     private bool isPlayerCanMove = true;
@@ -153,7 +159,7 @@ public class Barbarian : Creature
         (MainPlayerClasses)playerClass
         )
     {
-
+        
     }
 
 }

@@ -11,10 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform mainCameraTransform;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Light MainLight;
-
-    //todel
-    public TextMeshProUGUI texter;
-
+        
+    public Creature MainPlayerEntity { get; private set; }
     public Transform mainPlayerTransform { get; private set; }
     public Rigidbody mainPlayerRigidbody { get; private set; }
     public Transform cameraBody { get; private set; }
@@ -26,6 +24,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Globals.GetPlayerEntity();
+        MainPlayerEntity = Globals.MainPlayerEntity;
         Globals.IsPlatformMobile = Application.isMobilePlatform;
 
         if (Instance != null && Instance != this)
@@ -47,18 +46,6 @@ public class GameManager : MonoBehaviour
         //MinimapCamera.orthographicSize = 20;
         MainLight.intensity = 1.0f;
 
-        string message = "";
-
-        if (Application.isMobilePlatform)
-        {
-            message = "its mobile";
-        }
-        else
-        {
-            message = "its PC";
-        }
-
-        texter.text = message;
     }
 
 }
