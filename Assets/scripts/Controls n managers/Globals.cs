@@ -6,6 +6,14 @@ using UnityEngine;
 
 public class Globals: MonoBehaviour 
 {
+    public static Vector3 defaultCameraPositionMobile = new Vector3(0, 6, -3.5f);//0    7.2    -4.3
+    public static Vector3 defaultCameraRotationMobile = new Vector3(60, 0, 0);//60
+
+    public static Vector3 defaultCameraPositionPC = new Vector3(0, 7.2f, -4.3f);//0    7.2    -4.3
+    public static Vector3 defaultCameraRotationPC = new Vector3(60, 0, 0);//60
+
+    public static bool IsPlatformMobile;
+
     public static bool IsJoystick;
     public static PlayerData MainPlayerData;
     public static Creature MainPlayerEntity;

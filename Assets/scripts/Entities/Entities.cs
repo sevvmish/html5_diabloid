@@ -34,12 +34,33 @@ public abstract class Creature
     public float Stamina { get { return StaminaModifier * Level; } }
     public float StaminaModifier { get; private set; }
     public float StaminaModifierForHealth { get; private set; }
+
     public Inventory MainInventory { get; private set; }
     public void SetInventory(Inventory inventory)
     {
         MainInventory = inventory;
     }
-        
+
+    public Transform PlayerTransform { get; private set; }
+    public void SetTransform(Transform _transform) => PlayerTransform = _transform;
+    
+    public Transform RightHandContainer { get; private set; }
+    public void SetRightHandContainerTransform(Transform _transform) => RightHandContainer = _transform;
+    public Transform LeftHandContainer { get; private set; }
+    public void SetLeftHandContainerTransform(Transform _transform) => LeftHandContainer = _transform;
+    
+    public Rigidbody PlayerRigidbody { get; private set; }
+    public void SetRigidbody(Rigidbody rigidbody) => PlayerRigidbody = rigidbody;
+
+    public WeaponTriggerMelee TriggerMelee { get; private set; }
+    public void SetWeaponTriggerMelee(WeaponTriggerMelee melee) => TriggerMelee = melee;
+
+    public AnimationManager AnimationManager { get; private set; }
+    public void SetAnimationManager(AnimationManager manager) => AnimationManager = manager;
+
+    public EffectsManager EffectsManager { get; private set; }
+    public void SetEffectsManager(EffectsManager effects) => EffectsManager = effects;
+
 
     public Creature(
         int Level,
@@ -72,7 +93,7 @@ public abstract class Creature
         CurrentHealth = MaxHealth;        
     }
 
-    private bool isPlayerCanMove;
+    private bool isPlayerCanMove = true;
     public bool IsPlayerCanMove
     {
         get
@@ -86,7 +107,7 @@ public abstract class Creature
         }
     }
 
-    private bool isHitting;
+    private bool isHitting = false;
     public bool IsHitting
     {
         get
@@ -116,25 +137,7 @@ public abstract class Creature
 }
 
 public class Barbarian : Creature
-{    
-    public Barbarian() : base
-        (
-        1, //level
-        1, //StrengthModifier
-        1, //AgilityModifier
-        1, //IntellectModifier
-        1, //StaminaModifier
-        10, //StaminaModifierForHealth
-        1, //MaxSpeed
-        0.3f, //body radius
-        CreatureTypes.MainPlayer, 
-        CreatureSides.AllGood,
-        MainPlayerClasses.Barbarian
-        )
-    {
-
-    }
-
+{   
     public Barbarian(int level, int playerClass) : base
         (
         level, //level
@@ -148,6 +151,28 @@ public class Barbarian : Creature
         CreatureTypes.MainPlayer,
         CreatureSides.AllGood,
         (MainPlayerClasses)playerClass
+        )
+    {
+
+    }
+
+}
+
+public class SimpleSkeleton : Creature
+{
+    public SimpleSkeleton(int level) : base
+        (
+        level, //level
+        1, //StrengthModifier
+        1, //AgilityModifier
+        1, //IntellectModifier
+        1, //StaminaModifier
+        10, //StaminaModifierForHealth
+        1, //MaxSpeed
+        0.4f, //body radius
+        CreatureTypes.Skeleton,
+        CreatureSides.AllBad,
+        MainPlayerClasses.none
         )
     {
 

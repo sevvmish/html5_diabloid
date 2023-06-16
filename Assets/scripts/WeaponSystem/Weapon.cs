@@ -49,14 +49,25 @@ public class Weapon
                 return null;
             case 1: //short sword
                 return new Weapon(WeaponTypes.sword1h, DamageDistanceTypes.melee, DamageTypes.melee, 
-                    damageAmountMin, damageAmountMax, translation.ShortSword, 1, new Vector3(1.5f, 2.4f, -14.7f), new Vector3(90, 0, 180), new Vector3(35,50,35));
+                    damageAmountMin, damageAmountMax, translation.ShortSword, 1, 
+                    new Vector3(1f, 1.69f, -12.41f), new Vector3(0, 0, -81.65f), new Vector3(35,70,95));
+
+            case 2: //simple axe sword
+                return new Weapon(WeaponTypes.axe1h, DamageDistanceTypes.melee, DamageTypes.melee,
+                    damageAmountMin, damageAmountMax, translation.SimpleAxe, 2/*ID of prefab*/,
+                    new Vector3(3.63682f, 2.5f, -13.4174f), new Vector3(-437.7f, -90, 90f), new Vector3(100, 100, 100));
         }
 
         throw new NotImplementedException();
     }
 
-    public static WeaponTriggerMelee CreateMeleeWeaponTrigger(Transform mainPlayerTransform, int ownerID, CreatureSides side)
+    public static WeaponTriggerMelee CreateMeleeWeaponTrigger(Creature player)
     {
+        //Transform mainPlayerTransform, int ownerID, CreatureSides side
+        Transform mainPlayerTransform = player.PlayerTransform;
+        int ownerID = player.OwnerID;
+        CreatureSides side = player.CreatureSide;
+
         GameObject WeaponTrigger = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         WeaponTrigger.transform.parent = mainPlayerTransform;
         WeaponTrigger.GetComponent<SphereCollider>().isTrigger = true;

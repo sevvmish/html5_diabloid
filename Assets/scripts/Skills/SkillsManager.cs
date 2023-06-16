@@ -43,6 +43,6 @@ public abstract class Skill : MonoBehaviour
     
 
     public abstract bool ExecuteSkill(IHitable aim);
-    public abstract void SetData(Creature creature, WeaponTriggerMelee weaponTriggerMelee, EffectsManager effectsManager, Action invokeAnimation, Transform _transform);
+    public abstract void SetData(Creature creature, Action invokeAnimation);
 }
 

@@ -4,32 +4,36 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
-    private readonly Vector3 defaultCameraPosition = new Vector3(0, 6, -3.5f);
-    private readonly Vector3 defaultCameraRotation = new Vector3(60, 0, 0);
-
-    private readonly Vector3 defaultMinimapCameraPosition = new Vector3(0, 20, 0);
-    private readonly Vector3 defaultMinimapCameraRotation = new Vector3(90, 0, 0);
+    private Vector3 defaultCameraPosition = Vector3.zero;
+    private Vector3 defaultCameraRotation = Vector3.zero;
 
     private Transform cameraBody;
-    //private Transform minimapCameraBody;
     private Transform mainPlayerTransform;
+
+    private Vector3 cameraSpeed;
 
     void Start()
     {
+        if (Globals.IsPlatformMobile)
+        {
+            defaultCameraPosition = Globals.defaultCameraPositionMobile;
+            defaultCameraRotation = Globals.defaultCameraRotationMobile;
+        }
+        else
+        {
+            defaultCameraPosition = Globals.defaultCameraPositionPC;
+            defaultCameraRotation = Globals.defaultCameraRotationPC;
+        }
+
         cameraBody = GameManager.Instance.cameraBody;
-        //minimapCameraBody = GameManager.Instance.minimapCameraBody;
         mainPlayerTransform = GameManager.Instance.mainPlayerTransform;
 
         cameraBody.position = defaultCameraPosition;
         cameraBody.rotation = Quaternion.Euler(defaultCameraRotation);
-
-        //minimapCameraBody.position = defaultMinimapCameraPosition;
-        //minimapCameraBody.rotation = Quaternion.Euler(defaultMinimapCameraRotation);
     }
 
     private void LateUpdate()
     {        
         cameraBody.position = mainPlayerTransform.position + defaultCameraPosition;
-        //minimapCameraBody.position = mainPlayerTransform.position + defaultMinimapCameraPosition;
     }
 }

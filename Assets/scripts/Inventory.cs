@@ -20,4 +20,10 @@ public class Inventory
         MainWeapon = Weapon.GetFastWeaponById(player.MainWeaponID, player.MainWeaponMinDamage, player.MainWeaponMaxDamage);
         SecondWeapon = Weapon.GetFastWeaponById(player.SecondWeaponID, player.SecondWeaponMinDamage, player.SecondWeaponMaxDamage);
     }
+
+    public Inventory(int mainWeaponID, float minMainWeapDamage, float maxMainWeapDamage)
+    {
+        MainWeapon = Weapon.GetFastWeaponById(mainWeaponID, minMainWeapDamage, maxMainWeapDamage);
+        SecondWeapon = null;
+    }
 }

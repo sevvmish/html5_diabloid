@@ -14,16 +14,16 @@ public class SimpleMeleeHit1h : Skill
         DamageDistanceType = DamageDistanceTypes.melee;
     }
 
-    public override void SetData(Creature creature, WeaponTriggerMelee weaponTriggerMelee, EffectsManager effectsManager, Action invokeAnimation, Transform _transform)
+    public override void SetData(Creature creature, Action invokeAnimation)
     {
         PlayerData = creature;
         MainWeapon = PlayerData.MainInventory.MainWeapon;
         SecondWeapon = PlayerData.MainInventory.MainWeapon;
 
         InvokeAnimation = invokeAnimation;
-        mainPlayerTransform = _transform;
-        WeaponTriggerMelee = weaponTriggerMelee;
-        EffectsManager = effectsManager;
+        mainPlayerTransform = creature.PlayerTransform;
+        WeaponTriggerMelee = creature.TriggerMelee;
+        EffectsManager = creature.EffectsManager;
         MainDamageOutput = new DamageOutput(MainWeapon, PlayerData);
         SecondDamageOutput = new DamageOutput(SecondWeapon, PlayerData);
     }
@@ -67,7 +67,8 @@ public class SimpleMeleeHit1h : Skill
         //InvokeSkillHitStatus?.Invoke(true);
         PlayerData.IsHitting = true;
 
-        InvokeAnimation?.Invoke();
+        //InvokeAnimation?.Invoke();
+        PlayerData.AnimationManager.HitAnimation();
         EffectsManager.PlaySound(SoundsType.swing1H_medium);
         
         WeaponTriggerMelee.UpdateConditions(Distance, 1, MainDamageOutput);        

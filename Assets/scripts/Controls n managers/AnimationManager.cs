@@ -5,13 +5,13 @@ using UnityEngine;
 public class AnimationManager : MonoBehaviour
 {
     private Animator mainAnimator;
-    private PlayerManager playerManager;
+    private Creature player;
     private int animatorPriority;
 
     private void Update()
-    {
+    {        
         //animator data about run-idle
-        if (playerManager.playerRigidbody.velocity.magnitude > 0.1f)
+        if (player.PlayerRigidbody.velocity.magnitude > 0.1f)
         {
             RunAnimation();
         }
@@ -21,17 +21,15 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
-    //public bool isHitting { get; private set; }
-
-    public void SetData(Animator animator, PlayerManager manager)
+    public void SetData(Animator animator, Creature _player)
     {
         mainAnimator = animator;
-        playerManager = manager;
+        player = _player;
     }
 
     public void IdleAnimation()
     {
-        if (!playerManager.mainPlayerEntity.IsPlayerCanMove) return;
+        if (!player.IsPlayerCanMove) return;
 
         if (animatorPriority != 0)
         {
@@ -53,14 +51,16 @@ public class AnimationManager : MonoBehaviour
 
     public void DamageImpactAnimation()
     {
-        if (playerManager.mainPlayerEntity.IsHitting) return;
+        
+        if (player.IsHitting) return;
+        
 
         mainAnimator.Play("DamageImpact");
     }
 
     public void RunAnimation()
     {
-        if (!playerManager.mainPlayerEntity.IsPlayerCanMove) return;
+        if (!player.IsPlayerCanMove) return;
 
         if (animatorPriority != 1)
         {
@@ -84,14 +84,11 @@ public class AnimationManager : MonoBehaviour
     }
     private IEnumerator playHit()
     {
-        //isHitting = true;
         mainAnimator.StopPlayback();
         mainAnimator.Play("Hit1h_right");
         animatorPriority = 2;
 
         yield return new WaitForSeconds(0.4f);
         IdleAnimation();
-        //isHitting = false;
-        //animatorPriority = 0;
     }
 }

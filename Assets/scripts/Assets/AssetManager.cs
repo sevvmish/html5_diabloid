@@ -16,6 +16,8 @@ public class AssetManager : MonoBehaviour
 
             case 1:
                 return Resources.Load<GameObject>("heroes/Character_Knight_01_Black");
+            case 2:
+                return Resources.Load<GameObject>("enemies/SkeletonWarrior");
 
         }
 
@@ -30,7 +32,9 @@ public class AssetManager : MonoBehaviour
                 return null;
 
             case 1:
-                return Resources.Load<GameObject>("weapons/Sword1");
+                return Resources.Load<GameObject>("weapons/short sword");
+            case 2:
+                return Resources.Load<GameObject>("weapons/axe 1h 01");
 
         }
 

@@ -14,16 +14,16 @@ public class SimpleMeleeDualHit1h : Skill
         DamageDistanceType = DamageDistanceTypes.melee;
     }
 
-    public override void SetData(Creature creature, WeaponTriggerMelee weaponTriggerMelee, EffectsManager effectsManager, Action invokeAnimation, Transform _transform)
+    public override void SetData(Creature creature, Action invokeAnimation)
     {
         PlayerData = creature;
         MainWeapon = PlayerData.MainInventory.MainWeapon;
         SecondWeapon = PlayerData.MainInventory.MainWeapon;
 
         InvokeAnimation = invokeAnimation;
-        mainPlayerTransform = _transform;
-        WeaponTriggerMelee = weaponTriggerMelee;
-        EffectsManager = effectsManager;
+        mainPlayerTransform = creature.PlayerTransform;
+        WeaponTriggerMelee = creature.TriggerMelee;
+        EffectsManager = creature.EffectsManager;
         MainDamageOutput = new DamageOutput(MainWeapon, PlayerData);
         SecondDamageOutput = new DamageOutput(SecondWeapon, PlayerData);
     }

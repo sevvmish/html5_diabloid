@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Globals.GetPlayerEntity();
-        
+        Globals.IsPlatformMobile = Application.isMobilePlatform;
 
         if (Instance != null && Instance != this)
         {
