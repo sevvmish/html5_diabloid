@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
 public class EnemyManager : MonoBehaviour, IHitable
 {
@@ -27,8 +27,14 @@ public class EnemyManager : MonoBehaviour, IHitable
 
         PlayerCustomization.InitPlayerData(EnemyEntity, gameObject);
         PlayerCustomization.SetSkills(EnemyEntity, gameObject, ref skillOne);
+
+        gameObject.AddComponent<EnemyMovement>();
     }
 
+    public bool SkillOneAttack(IHitable aim)
+    {
+        return skillOne.ExecuteSkill(aim);
+    }
 
     //IHITABLE==============================================================
     public int OwnerID { get => EnemyEntity.OwnerID; }

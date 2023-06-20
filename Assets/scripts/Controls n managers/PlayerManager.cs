@@ -71,7 +71,7 @@ public class PlayerManager : MonoBehaviour, IHitable
     public CreatureSides CreatureSide { get => mainPlayerEntity.CreatureSide; }
     public void ReceiveHit(DamageOutput wd)
     {
-        print("damage: " + wd.FinalDamageAmount);
+        //print("damage: " + wd.FinalDamageAmount);
         mainPlayerEntity.EffectsManager.PlayRandomMeleeImpactMedium();
         StartCoroutine(receiveHit());
     }

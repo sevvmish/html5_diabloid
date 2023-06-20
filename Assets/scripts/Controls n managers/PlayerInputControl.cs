@@ -14,30 +14,26 @@ public class PlayerInputControl : MonoBehaviour
     private readonly float cameraRayCast = 30f;
     private Vector3 destinationPoint;
     private bool isStopped;
-    private bool isJoystick = Globals.IsJoystick;
+    private bool isJoystick;
 
     private PlayerManager playerManager;
     private Creature player;
-    private float speed = 5;
+    //private float speed = 5;
     private float deltaLimit;
-
-
-    //todel
     
 
     void Start()
     {
+        isJoystick = Globals.IsPlatformMobile;
         joystick = GameManager.Instance.GetJoystick;
+        if (!isJoystick) joystick.gameObject.SetActive(false);
+
         playerRigidbody = GameManager.Instance.mainPlayerRigidbody;
         mainPlayerTransform = GameManager.Instance.mainPlayerTransform;
         mainCamera = GameManager.Instance.GetMainCamera;
         playerManager = GetComponent<PlayerManager>();
         player = playerManager.mainPlayerEntity;
-
-        if (!isJoystick)
-        {
-            joystick.gameObject.SetActive(false);
-        }
+        
     }
        
     private void FixedUpdate()
@@ -48,9 +44,9 @@ public class PlayerInputControl : MonoBehaviour
             if (joystick.Direction.magnitude > 0f && player.IsPlayerCanMove)
             {
                 mainPlayerTransform.DOLocalRotate(new Vector3(0, Mathf.Atan2(joystick.Horizontal, joystick.Vertical) * 180 / Mathf.PI, 0), 0.1f);
-                if (playerRigidbody.velocity.magnitude < speed)
+                if (playerRigidbody.velocity.magnitude < player.CurrentSpeed)
                 {
-                    playerRigidbody.velocity = mainPlayerTransform.forward * speed;
+                    playerRigidbody.velocity = mainPlayerTransform.forward * player.CurrentSpeed;
                 }
 
                 isStopped = false;
@@ -140,7 +136,6 @@ public class PlayerInputControl : MonoBehaviour
         {
             playerManager.SkillOneAttack(null);
         }
-
         
     }
 
@@ -151,11 +146,17 @@ public class PlayerInputControl : MonoBehaviour
         Vector2 dir = new Vector2(point.x - mainPlayerTransform.position.x, point.z - mainPlayerTransform.position.z);
 
         mainPlayerTransform.DOLocalRotate(new Vector3(0, Mathf.Atan2(dir.x, dir.y) * 180 / Mathf.PI, 0), 0.1f);
-
-        if (playerRigidbody.velocity.magnitude < speed)
+                
+        if (playerRigidbody.velocity.magnitude < player.CurrentSpeed)
         {
-             playerRigidbody.velocity = mainPlayerTransform.forward * speed;
+             playerRigidbody.velocity = mainPlayerTransform.forward * player.CurrentSpeed;
         }
+        
+        /*
+        if (newSpeed < 0.09f)
+        {            
+            playerRigidbody.transform.position += (mainPlayerTransform.forward * 0.09f);
+        }*/
     }
 
 

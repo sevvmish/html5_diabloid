@@ -32,11 +32,11 @@ public class SimpleMeleeHit1h : Skill
 
     public override bool ExecuteSkill(IHitable aim)
     {
-        bool isClose = (mainPlayerTransform.position - aim.AimTransform.position).magnitude <= (Distance + aim.PlayerRadius);
+        
 
         if (MainWeapon == null)
         {
-            return isClose;
+            return false;
         }
 
         if (aim == null)
@@ -50,7 +50,7 @@ public class SimpleMeleeHit1h : Skill
         }
         else
         {
-            
+            bool isClose = (mainPlayerTransform.position - aim.AimTransform.position).magnitude <= (Distance + aim.PlayerRadius);
             if (!IsCooldownActive && isClose)
             {
                 StartCoroutine(attack());

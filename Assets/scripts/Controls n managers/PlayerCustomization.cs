@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerCustomization : MonoBehaviour
 {
@@ -33,11 +34,19 @@ public class PlayerCustomization : MonoBehaviour
         playerData.SetWeaponTriggerMelee(Weapon.CreateMeleeWeaponTrigger(playerData));
         playerData.SetEffectsManager(GetEffectsManager(playerData));
 
+        NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
+        if (agent != null)
+        {
+            playerData.SetNavMeshAgent(agent);
+        }
+
         int skinID = GetIDForPlayerSkin(playerData);
 
         GameObject skin = Instantiate(AssetManager.GetPlayerSkinByID(skinID), player.transform.position, Quaternion.identity, player.transform);
         playerData.SetAnimationManager(skin.AddComponent<AnimationManager>());
         playerData.AnimationManager.SetData(skin.GetComponent<Animator>(), playerData);
+        
+        searched = null;
 
         ReturnChildOfParent(skin.transform, "hand_container_right");
         playerData.SetRightHandContainerTransform(searched);

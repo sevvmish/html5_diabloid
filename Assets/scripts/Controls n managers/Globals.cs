@@ -14,7 +14,6 @@ public class Globals: MonoBehaviour
 
     public static bool IsPlatformMobile;
 
-    public static bool IsJoystick;
     public static PlayerData MainPlayerData;
     public static Creature MainPlayerEntity;
 

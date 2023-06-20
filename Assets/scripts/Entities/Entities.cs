@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class Creature
 {
@@ -64,6 +65,9 @@ public abstract class Creature
     public EffectsManager EffectsManager { get; private set; }
     public void SetEffectsManager(EffectsManager effects) => EffectsManager = effects;
 
+    public NavMeshAgent PlayerAgent { get; private set; }
+    public void SetNavMeshAgent(NavMeshAgent agent) => PlayerAgent = agent;
+
 
     public Creature(
         int Level,
@@ -97,6 +101,7 @@ public abstract class Creature
 
         minHealthAmount = 40;
         CurrentHealth = MaxHealth;
+        CurrentSpeed = MaxSpeed;
     }
 
     private bool isPlayerCanMove = true;
@@ -152,7 +157,7 @@ public class Barbarian : Creature
         1, //IntellectModifier
         1, //StaminaModifier
         10, //StaminaModifierForHealth
-        1, //MaxSpeed
+        5, //MaxSpeed
         0.4f, //body radius
         CreatureTypes.MainPlayer,
         CreatureSides.AllGood,
@@ -174,7 +179,7 @@ public class SimpleSkeleton : Creature
         1, //IntellectModifier
         1, //StaminaModifier
         10, //StaminaModifierForHealth
-        1, //MaxSpeed
+        3, //MaxSpeed
         0.4f, //body radius
         CreatureTypes.Skeleton,
         CreatureSides.AllBad,

@@ -31,7 +31,7 @@ public class SaveLoad
     private static PlayerData loadFromPrefs()
     {
         PlayerData player = new PlayerData();
-        int saverID = 14;
+        int saverID = 18;
 
         //main data
         if (PlayerPrefs.GetInt("SaverId") == saverID)
@@ -62,9 +62,9 @@ public class SaveLoad
             player.MainWeaponMinDamage = 3;
             player.MainWeaponMaxDamage = 5;
 
-            player.SecondWeaponID = 0;
-            player.SecondWeaponMinDamage = 0;
-            player.SecondWeaponMaxDamage = 0;
+            player.SecondWeaponID = 2;
+            player.SecondWeaponMinDamage = 3;
+            player.SecondWeaponMaxDamage = 5;
 
             saveToPrefs(player);
 
