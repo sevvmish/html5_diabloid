@@ -11,10 +11,11 @@ public class SimpleMeleeHit1h : Skill
         SkillDescription = Localization.GetInstanse().GetCurrentTranslation().Skill01Description;
         Distance = 1.5f;
         Cooldown = 0.7f;
+        TimeForPerform = 0.7f;
         DamageDistanceType = DamageDistanceTypes.melee;
     }
 
-    public override void SetData(Creature creature, Action invokeAnimation)
+    public override void SetData(Creature creature, Action invokeAnimation, float cooldownKoeff)
     {
         PlayerData = creature;
         MainWeapon = PlayerData.MainInventory.MainWeapon;
@@ -26,14 +27,14 @@ public class SimpleMeleeHit1h : Skill
         EffectsManager = creature.EffectsManager;
         MainDamageOutput = new DamageOutput(MainWeapon, PlayerData);
         SecondDamageOutput = new DamageOutput(SecondWeapon, PlayerData);
+
+        Cooldown *= cooldownKoeff;
     }
 
     
 
     public override bool ExecuteSkill(IHitable aim)
     {
-        
-
         if (MainWeapon == null)
         {
             return false;
@@ -64,28 +65,35 @@ public class SimpleMeleeHit1h : Skill
     private IEnumerator attack()
     {
         SetSkillCooldown(true);
-        //InvokeSkillHitStatus?.Invoke(true);
         PlayerData.IsHitting = true;
 
-        //InvokeAnimation?.Invoke();
-        PlayerData.AnimationManager.HitAnimation();
-        EffectsManager.PlaySound(SoundsType.swing1H_medium);
-        
+        PlayerData.AnimationManager.Hit1HAnimation();
+        //EffectsManager.PlaySound(SoundsType.swing1H_medium);
+        StartCoroutine(playSoundAfterDelay(0.1f, SoundsType.swing1H_medium));
+
+        yield return new WaitForSeconds(0.1f);
+
         WeaponTriggerMelee.UpdateConditions(Distance, 1, MainDamageOutput);        
         WeaponTriggerMelee.gameObject.SetActive(true);
         
-        yield return new WaitForSeconds(Time.fixedDeltaTime);
+        yield return new WaitForSeconds(0.1f);
         
         WeaponTriggerMelee.gameObject.SetActive(false);
                 
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(TimeForPerform - 0.2f);
+        
 
-        //InvokeSkillHitStatus?.Invoke(false);
         PlayerData.IsHitting = false;
 
-        yield return new WaitForSeconds(Cooldown - 0.4f);
+        yield return new WaitForSeconds(Cooldown - TimeForPerform - 0.2f);
         
         SetSkillCooldown(false);
+    }
+
+    private IEnumerator playSoundAfterDelay(float delay, SoundsType sound)
+    {
+        yield return new WaitForSeconds(delay);
+        EffectsManager.PlaySound(sound);
     }
 }
 

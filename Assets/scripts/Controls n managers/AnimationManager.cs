@@ -155,7 +155,7 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
-    public void HitAnimation()
+    public void Hit1HAnimation()
     {        
         StartCoroutine(playHit());
     }
@@ -165,7 +165,7 @@ public class AnimationManager : MonoBehaviour
         mainAnimator.Play("Hit1h_right");
         animatorPriority = 3;
 
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.5f);
         IdleAnimation();
     }
 }

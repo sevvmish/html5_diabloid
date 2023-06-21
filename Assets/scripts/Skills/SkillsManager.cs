@@ -22,6 +22,7 @@ public abstract class Skill : MonoBehaviour
 {
     public float Distance { get; set; }
     public float Cooldown { get; set; }
+    public float TimeForPerform { get; set; }
     public string SkillName { get; set; }
     public string SkillDescription { get; set; }
     public DamageDistanceTypes DamageDistanceType { get; set; }
@@ -43,6 +44,6 @@ public abstract class Skill : MonoBehaviour
     
 
     public abstract bool ExecuteSkill(IHitable aim);
-    public abstract void SetData(Creature creature, Action invokeAnimation);
+    public abstract void SetData(Creature creature, Action invokeAnimation, float cooldownKoeff);
 }
 

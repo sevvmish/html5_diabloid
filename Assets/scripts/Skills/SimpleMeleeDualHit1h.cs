@@ -14,7 +14,7 @@ public class SimpleMeleeDualHit1h : Skill
         DamageDistanceType = DamageDistanceTypes.melee;
     }
 
-    public override void SetData(Creature creature, Action invokeAnimation)
+    public override void SetData(Creature creature, Action invokeAnimation, float cooldownKoeff)
     {
         PlayerData = creature;
         MainWeapon = PlayerData.MainInventory.MainWeapon;
@@ -26,6 +26,8 @@ public class SimpleMeleeDualHit1h : Skill
         EffectsManager = creature.EffectsManager;
         MainDamageOutput = new DamageOutput(MainWeapon, PlayerData);
         SecondDamageOutput = new DamageOutput(SecondWeapon, PlayerData);
+
+        Cooldown *= cooldownKoeff;
     }
 
 

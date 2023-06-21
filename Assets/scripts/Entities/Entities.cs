@@ -181,7 +181,7 @@ public class SimpleSkeleton : Creature
         10, //StaminaModifierForHealth
         3, //MaxSpeed
         0.4f, //body radius
-        CreatureTypes.Skeleton,
+        CreatureTypes.SimpleSkeleton,
         CreatureSides.AllBad,
         MainPlayerClasses.none
         )
@@ -208,7 +208,7 @@ public enum CreatureTypes
 {
     MainPlayer,
     Human,
-    Skeleton,
+    SimpleSkeleton,
     Undead
 }
 

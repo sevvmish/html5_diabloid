@@ -8,7 +8,7 @@ public class EnemyManager : MonoBehaviour, IHitable
 {
     public Creature EnemyEntity { get; private set; }
     
-    public CreatureTypes CreatureType = CreatureTypes.Skeleton;
+    public CreatureTypes CreatureType = CreatureTypes.SimpleSkeleton;
     public int Level = 1;
 
     //skills
@@ -19,7 +19,7 @@ public class EnemyManager : MonoBehaviour, IHitable
     {
         switch(CreatureType)
         {
-            case CreatureTypes.Skeleton:
+            case CreatureTypes.SimpleSkeleton:
                 EnemyEntity = new SimpleSkeleton(Level);
                 EnemyEntity.SetInventory(new Inventory(1,3,5));
                 break;

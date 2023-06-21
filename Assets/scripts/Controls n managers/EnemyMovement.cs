@@ -29,7 +29,7 @@ public class EnemyMovement : MonoBehaviour
         {
             _timer = 0;
             float distance = (transform.position - aimHitable.AimTransform.position).magnitude;
-
+            
             if (distance <= 1.5f)
             {
                 enemyManager.SkillOneAttack(aimHitable);                

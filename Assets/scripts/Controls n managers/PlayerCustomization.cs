@@ -12,13 +12,13 @@ public class PlayerCustomization : MonoBehaviour
         if (playerData.MainPlayerClass == MainPlayerClasses.Barbarian)
         {
             skill = playerObject.AddComponent<SimpleMeleeHit1h>();
-            skill.SetData(playerData, playerData.AnimationManager.HitAnimation);
+            skill.SetData(playerData, playerData.AnimationManager.Hit1HAnimation, 1);
         }
 
-        if (playerData.CreatureType == CreatureTypes.Skeleton)
+        if (playerData.CreatureType == CreatureTypes.SimpleSkeleton)
         {
             skill = playerObject.AddComponent<SimpleMeleeHit1h>();
-            skill.SetData(playerData, playerData.AnimationManager.HitAnimation);
+            skill.SetData(playerData, playerData.AnimationManager.Hit1HAnimation, 2);
         }
     }
 
@@ -66,7 +66,7 @@ public class PlayerCustomization : MonoBehaviour
             return 1;
         }
 
-        if (playerData.CreatureType == CreatureTypes.Skeleton)
+        if (playerData.CreatureType == CreatureTypes.SimpleSkeleton)
         {
             return 2;
         }
