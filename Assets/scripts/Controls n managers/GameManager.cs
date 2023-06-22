@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public Rigidbody mainPlayerRigidbody { get; private set; }
     public Transform cameraBody { get; private set; }
     public Joystick GetJoystick => mainJoystick;
+    public Light GetMainLight => MainLight;
     public Camera GetMainCamera => mainCamera;
     public static GameManager Instance { get; private set; }
 
