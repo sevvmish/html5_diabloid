@@ -20,7 +20,7 @@ public class PlayerInputControl : MonoBehaviour
     private Creature player;
     //private float speed = 5;
     private float deltaLimit;
-    
+    private LayerMask ignoreMask;
 
     void Start()
     {
@@ -33,7 +33,8 @@ public class PlayerInputControl : MonoBehaviour
         mainCamera = GameManager.Instance.GetMainCamera;
         playerManager = GetComponent<PlayerManager>();
         player = playerManager.mainPlayerEntity;
-        
+
+        ignoreMask = LayerMask.GetMask("Trigger");
     }
        
     private void FixedUpdate()
@@ -70,11 +71,9 @@ public class PlayerInputControl : MonoBehaviour
             if (Input.GetMouseButton(0) && player.IsPlayerCanMove)
             {                
                 ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-                LayerMask mask = 10;
-
-                if (Physics.Raycast(ray, out hit, cameraRayCast, ~mask))
-                {
+                
+                if (Physics.Raycast(ray, out hit, cameraRayCast, ~ignoreMask))
+                {                    
                     if (hit.collider.gameObject.layer.Equals(7))
                     {
                         destinationPoint = hit.point;
