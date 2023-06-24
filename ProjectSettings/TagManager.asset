@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Missile
+  - WorldCreator
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - Floor
   - Enemy
   - Map
-  - 
+  - Trigger
   - 
   - 
   - 

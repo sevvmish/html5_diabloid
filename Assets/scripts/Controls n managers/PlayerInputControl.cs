@@ -71,7 +71,9 @@ public class PlayerInputControl : MonoBehaviour
             {                
                 ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit, cameraRayCast))
+                LayerMask mask = 10;
+
+                if (Physics.Raycast(ray, out hit, cameraRayCast, ~mask))
                 {
                     if (hit.collider.gameObject.layer.Equals(7))
                     {

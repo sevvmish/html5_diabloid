@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3500131852767939753}
-  - component: {fileID: 6253517613987474314}
   m_Layer: 0
   m_Name: forest light ground tile
   m_TagString: Untagged
@@ -32,27 +31,8 @@ Transform:
   - {fileID: 6334796678327705034}
   - {fileID: 6709809150793596615}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &6253517613987474314
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 396758653505629492}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0, y: -0.5, z: 0}
-  m_Size: 10
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.4
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 5004738086852477295}
-  m_Enabled: 1
 --- !u!1 &568694892945692873
 GameObject:
   m_ObjectHideFlags: 0
