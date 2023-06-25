@@ -68,10 +68,11 @@ public class PlayerManager : MonoBehaviour, IHitable
     public int OwnerID { get => mainPlayerEntity.OwnerID; }
     public float PlayerRadius { get => mainPlayerEntity.BodyRadius; }
     public Transform AimTransform { get => mainPlayerEntity.PlayerTransform; }
-    public CreatureSides CreatureSide { get => mainPlayerEntity.CreatureSide; }
+    public int CreatureSide { get => mainPlayerEntity.CreatureSide; }
     public void ReceiveHit(DamageOutput wd)
     {
         //print("damage: " + wd.FinalDamageAmount);
+        GameManager.Instance.GetMessageSystem.ShowMessageFrame(transform.position + Vector3.up * 1.8f, wd.FinalDamageAmount.ToString("f0"), Color.red);
         mainPlayerEntity.EffectsManager.PlayRandomMeleeImpactMedium();
         StartCoroutine(receiveHit());
     }

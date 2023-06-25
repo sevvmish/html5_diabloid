@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 
 public class WeaponTriggerMelee : MonoBehaviour
@@ -8,11 +9,15 @@ public class WeaponTriggerMelee : MonoBehaviour
     private int currentEnemyLimit;
     private DamageOutput weaponDamage;
     private Transform player;
-    private float distance;
-    private CreatureSides aimEnemies;
+    private float defaultAngle;
+    private int playerSide;
+
+    private IHitable aim;
+    private float angle;
 
     private void OnEnable()
     {
+        defaultAngle = 60;
         currentEnemyLimit = 0;
     }
 
@@ -21,41 +26,45 @@ public class WeaponTriggerMelee : MonoBehaviour
     {                
         if (other != null)
         {
-            IHitable h = other.GetComponent<IHitable>();
-
-            if (h != null && h.OwnerID != ownerID /*&& h.CreatureSide == aimEnemies*/)
+            aim = other.GetComponent<IHitable>();
+            
+            if (aim != null && aim.OwnerID != ownerID && aim.CreatureSide != playerSide)
             {                
-                player.DOLookAt(new Vector3(h.AimTransform.position.x, 0, h.AimTransform.position.z), 0.1f);
-                h.ReceiveHit(weaponDamage);
-                currentEnemyLimit++;
+                StartCoroutine(playHit(aim));
+            }
+        }
+    }
 
-                if (currentEnemyLimit >= enemyLimit) 
-                {
-                    gameObject.SetActive(false);
-                }
+    private IEnumerator playHit(IHitable aim)
+    {   
+        player.DOLookAt(new Vector3(aim.AimTransform.position.x, 0, aim.AimTransform.position.z), 0.1f);        
+        yield return new WaitForSeconds(0.1f);
+
+        angle = Vector3.Angle(player.forward, (aim.AimTransform.position - player.position));
+
+        if (angle < defaultAngle)
+        {
+            aim.ReceiveHit(weaponDamage);
+            currentEnemyLimit++;
+
+            if (currentEnemyLimit >= enemyLimit)
+            {
+                gameObject.SetActive(false);
             }
         }
     }
 
 
-    public void SetBaseConditions(int ownerID, Transform player, CreatureSides side)
+    public void SetBaseConditions(int ownerID, Transform player, int side)
     {       
         this.ownerID = ownerID;
         this.player = player;
 
-        if (side == CreatureSides.AllGood)
-        {
-            aimEnemies = CreatureSides.AllBad;
-        }
-        else if (side == CreatureSides.AllBad)
-        {
-            aimEnemies = CreatureSides.AllGood;
-        }
+        playerSide = side;
     }
 
     public void UpdateConditions(float distance, int enemiesLimit, DamageOutput damage)
-    {
-        this.distance = distance;
+    {        
         enemyLimit = enemiesLimit;
         weaponDamage = damage;
 

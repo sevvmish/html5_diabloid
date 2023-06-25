@@ -38,6 +38,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 movementToPoint(Vector3.Lerp(transform.position, aimHitable.AimTransform.position, (distance - 1)/distance));
             }
+
         }
         else
         {

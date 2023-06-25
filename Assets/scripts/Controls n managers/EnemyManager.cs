@@ -43,11 +43,13 @@ public class EnemyManager : MonoBehaviour, IHitable
 
     public Transform AimTransform { get => EnemyEntity.PlayerTransform; }
 
-    public CreatureSides CreatureSide { get => EnemyEntity.CreatureSide; }
+    public int CreatureSide { get => EnemyEntity.CreatureSide; }
 
     public void ReceiveHit(DamageOutput damage)
     {
         print("damage: " + damage.FinalDamageAmount);
+        GameManager.Instance.GetMessageSystem.ShowMessageFrame
+            (transform.position + Vector3.up * 1.8f, damage.FinalDamageAmount.ToString("f0"), Color.yellow);
         EnemyEntity.AnimationManager.DamageImpactAnimation();
         EnemyEntity.EffectsManager.PlaySound(SoundsType.meleeImpactMediumMoreBlunt);
     }

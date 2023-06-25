@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform mainCameraTransform;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Light MainLight;
-        
+    [SerializeField] private MessageSystem mainMessageSystem;
+
     public Creature MainPlayerEntity { get; private set; }
     public Transform mainPlayerTransform { get; private set; }
     public Rigidbody mainPlayerRigidbody { get; private set; }
@@ -22,12 +23,16 @@ public class GameManager : MonoBehaviour
     public Light GetMainLight => MainLight;
     public Camera GetMainCamera => mainCamera;
     public static GameManager Instance { get; private set; }
+    public MessageSystem GetMessageSystem => mainMessageSystem;
 
     private GameObject TransitionScreen;
     
     // Start is called before the first frame update
     void Awake()
     {
+        //Screen.SetResolution(1200, 600, false);
+        Application.targetFrameRate = -1;
+
         Globals.GetPlayerEntity();
         MainPlayerEntity = Globals.MainPlayerEntity;
         Globals.IsPlatformMobile = Application.isMobilePlatform;
@@ -43,8 +48,7 @@ public class GameManager : MonoBehaviour
 
         AudioListener.volume = 0.7f;
 
-        //Screen.SetResolution(1200, 600, false);        
-        Application.targetFrameRate = -1;
+        
         StartCoroutine(fadeScreen());
 
         mainPlayerTransform = MainPlayer.GetComponent<Transform>();

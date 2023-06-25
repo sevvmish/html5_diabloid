@@ -18,7 +18,7 @@ public abstract class Creature
     public void ChangeCurrentHP(float amount) => CurrentHealth += amount;
     
     public CreatureTypes CreatureType { get; private set; }
-    public CreatureSides CreatureSide { get; private set; }
+    public int CreatureSide { get; private set; }
     public float CurrentSpeed { get; private set; }
     public float MaxSpeed { get; private set; }
     public MainPlayerClasses MainPlayerClass { get; private set; }
@@ -79,7 +79,7 @@ public abstract class Creature
         float MaxSpeed,
         float BodyRadius,
         CreatureTypes CreatureType,
-        CreatureSides CreatureSide,
+        int CreatureSide,
         MainPlayerClasses MainPlayerClass
 
         )
@@ -160,7 +160,7 @@ public class Barbarian : Creature
         5, //MaxSpeed
         0.4f, //body radius
         CreatureTypes.MainPlayer,
-        CreatureSides.AllGood,
+        0,
         (MainPlayerClasses)playerClass
         )
     {
@@ -182,7 +182,7 @@ public class SimpleSkeleton : Creature
         3, //MaxSpeed
         0.4f, //body radius
         CreatureTypes.SimpleSkeleton,
-        CreatureSides.AllBad,
+        -1,
         MainPlayerClasses.none
         )
     {
@@ -199,7 +199,7 @@ public interface IHitable
     float PlayerRadius { get; }
     void ReceiveHit(DamageOutput damage);
     Transform AimTransform { get; }
-    CreatureSides CreatureSide { get; }
+    int CreatureSide { get; }
 }
 
 
@@ -210,12 +210,6 @@ public enum CreatureTypes
     Human,
     SimpleSkeleton,
     Undead
-}
-
-public enum CreatureSides
-{
-    AllGood,
-    AllBad
 }
 
 public enum MainPlayerClasses

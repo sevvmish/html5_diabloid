@@ -56,13 +56,13 @@ public class ObjectPooling<T> : MonoBehaviour
             _object = Instantiate(example, storage);
         }
 
-        _object.SetActive(false);
+        _object.SetActive(true);
 
         return _object.GetComponent<T>();
     }
 
     public void ReturnObject(T _object)
-    {        
+    {   
         poolOfObjects.Enqueue(_object);
     }
 }

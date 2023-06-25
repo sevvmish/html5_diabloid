@@ -63,22 +63,19 @@ public class Weapon
 
     public static WeaponTriggerMelee CreateMeleeWeaponTrigger(Creature player)
     {
-        //Transform mainPlayerTransform, int ownerID, CreatureSides side
         Transform mainPlayerTransform = player.PlayerTransform;
         int ownerID = player.OwnerID;
-        CreatureSides side = player.CreatureSide;
 
         GameObject WeaponTrigger = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         WeaponTrigger.transform.parent = mainPlayerTransform;
         WeaponTrigger.GetComponent<SphereCollider>().isTrigger = true;
         WeaponTrigger.GetComponent<MeshRenderer>().enabled = false;
-        //Destroy(WeaponTrigger.GetComponent<MeshFilter>());
         WeaponTrigger.transform.localScale = Vector3.one;
         WeaponTrigger.transform.localPosition = new Vector3(0, 0.5f, 0);
 
         WeaponTriggerMelee result = WeaponTrigger.AddComponent<WeaponTriggerMelee>();
         WeaponTrigger.SetActive(false);
-        result.SetBaseConditions(ownerID, mainPlayerTransform, CreatureSides.AllGood);
+        result.SetBaseConditions(ownerID, mainPlayerTransform, player.CreatureSide);
         return result;
     }
 }

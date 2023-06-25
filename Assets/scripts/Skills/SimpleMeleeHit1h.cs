@@ -68,7 +68,6 @@ public class SimpleMeleeHit1h : Skill
         PlayerData.IsHitting = true;
 
         PlayerData.AnimationManager.Hit1HAnimation();
-        //EffectsManager.PlaySound(SoundsType.swing1H_medium);
         StartCoroutine(playSoundAfterDelay(0.1f, SoundsType.swing1H_medium));
 
         yield return new WaitForSeconds(0.1f);
@@ -76,16 +75,16 @@ public class SimpleMeleeHit1h : Skill
         WeaponTriggerMelee.UpdateConditions(Distance, 1, MainDamageOutput);        
         WeaponTriggerMelee.gameObject.SetActive(true);
         
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.15f);
         
         WeaponTriggerMelee.gameObject.SetActive(false);
                 
-        yield return new WaitForSeconds(TimeForPerform - 0.2f);
+        yield return new WaitForSeconds(TimeForPerform - 0.25f);
         
 
         PlayerData.IsHitting = false;
 
-        yield return new WaitForSeconds(Cooldown - TimeForPerform - 0.2f);
+        yield return new WaitForSeconds(Cooldown - TimeForPerform - 0.25f);
         
         SetSkillCooldown(false);
     }
