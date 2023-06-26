@@ -35,7 +35,7 @@ public class MessageSystem : MonoBehaviour
         for (float i = 0; i < 1; i+=Time.deltaTime)
         {
             Vector3 newPos = mainCamera.WorldToScreenPoint(position);
-            currentText.rectTransform.anchoredPosition3D = new Vector3(newPos.x - halfLength, newPos.y, newPos.z);
+            currentText.rectTransform.anchoredPosition3D = new Vector3(newPos.x - halfLength-600, newPos.y-300, 0);
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
