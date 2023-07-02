@@ -72,7 +72,8 @@ public class PlayerManager : MonoBehaviour, IHitable
     public void ReceiveHit(DamageOutput wd)
     {
         //print("damage: " + wd.FinalDamageAmount);
-        GameManager.Instance.GetMessageSystem.ShowMessageFrame(transform.position + Vector3.up * 1.8f, wd.FinalDamageAmount.ToString("f0"), Color.red);
+        GameManager.Instance.GetMessageSystem.ShowMessageFrame
+            (2f, wd.FinalDamageAmount.ToString("f0"), Color.red, transform);
         mainPlayerEntity.EffectsManager.PlayRandomMeleeImpactMedium();
         StartCoroutine(receiveHit());
     }

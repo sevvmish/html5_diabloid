@@ -49,7 +49,7 @@ public class EnemyManager : MonoBehaviour, IHitable
     {
         print("damage: " + damage.FinalDamageAmount);
         GameManager.Instance.GetMessageSystem.ShowMessageFrame
-            (transform.position + Vector3.up * 1.8f, damage.FinalDamageAmount.ToString("f0"), Color.yellow);
+            (2f, damage.FinalDamageAmount.ToString("f0"), Color.yellow, transform);
         EnemyEntity.AnimationManager.DamageImpactAnimation();
         EnemyEntity.EffectsManager.PlaySound(SoundsType.meleeImpactMediumMoreBlunt);
     }

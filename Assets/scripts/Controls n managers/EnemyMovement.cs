@@ -19,6 +19,7 @@ public class EnemyMovement : MonoBehaviour
         enemyManager = GetComponent<EnemyManager>();
         aimHitable = GameManager.Instance.mainPlayerTransform.GetComponent<IHitable>();
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = enemy.CurrentSpeed;
     }
 
 

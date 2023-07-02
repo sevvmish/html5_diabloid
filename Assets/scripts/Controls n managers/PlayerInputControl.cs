@@ -1,9 +1,12 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerInputControl : MonoBehaviour
 {
+    [SerializeField] private Button mainSpellButtonJ;
+
     private Joystick joystick;
     private Rigidbody playerRigidbody;
     private Transform mainPlayerTransform;
@@ -34,7 +37,12 @@ public class PlayerInputControl : MonoBehaviour
         playerManager = GetComponent<PlayerManager>();
         player = playerManager.mainPlayerEntity;
 
-        ignoreMask = LayerMask.GetMask("Trigger");
+        ignoreMask = LayerMask.GetMask("Trigger", "UI");
+
+        mainSpellButtonJ.onClick.AddListener(() =>
+        {
+            playerManager.SkillOneAttack(null);
+        });
     }
        
     private void FixedUpdate()

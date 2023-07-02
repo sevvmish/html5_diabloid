@@ -65,7 +65,7 @@ public class SimpleMeleeHit1h : Skill
     private IEnumerator attack()
     {
         SetSkillCooldown(true);
-        PlayerData.IsHitting = true;
+        PlayerData.IsPerformingSkill = true;
 
         PlayerData.AnimationManager.Hit1HAnimation();
         StartCoroutine(playSoundAfterDelay(0.1f, SoundsType.swing1H_medium));
@@ -82,7 +82,7 @@ public class SimpleMeleeHit1h : Skill
         yield return new WaitForSeconds(TimeForPerform - 0.25f);
         
 
-        PlayerData.IsHitting = false;
+        PlayerData.IsPerformingSkill = false;
 
         yield return new WaitForSeconds(Cooldown - TimeForPerform - 0.25f);
         

@@ -118,12 +118,12 @@ public abstract class Creature
         }
     }
 
-    private bool isHitting = false;
-    public bool IsHitting
+    private bool isPerformingSkill = false;
+    public bool IsPerformingSkill
     {
         get
         {
-            return isHitting;
+            return isPerformingSkill;
         }
 
         set
@@ -137,10 +137,29 @@ public abstract class Creature
                 isPlayerCanMove = true;
             }
 
-            isHitting = value;
+            isPerformingSkill = value;
         }
     }
-    
+
+    private bool isDead = false;
+    public bool IsDead
+    {
+        get
+        {
+            return isDead;
+        }
+
+        set
+        {
+            if (value)
+            {
+                isPlayerCanMove = false;
+            }
+
+            isDead = value;
+        }
+    }
+
 
     public Creature() { }
 

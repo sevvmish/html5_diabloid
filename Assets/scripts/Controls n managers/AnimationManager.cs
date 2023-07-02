@@ -114,7 +114,7 @@ public class AnimationManager : MonoBehaviour
     public void DamageImpactAnimation()
     {
         
-        if (player.IsHitting) return;
+        if (player.IsPerformingSkill) return;
         
         if (animatorPriority<1)
         {
